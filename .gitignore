@@ -1,0 +1,21 @@
+# 本机环境、缓存与敏感配置
+.DS_Store
+._*
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+# 录制及大型交付物通过视频平台/网盘提供
+*.mp4
+*.mov
+*.m4a
+*.zip
+*.pyenc
+练习输出/

@@ -1,0 +1,9 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.png binary
+*.ico binary
+*.docx binary
+# Preserve the delivered source bytes and provenance hashes.
+01-文件加密工具/源代码/** -text

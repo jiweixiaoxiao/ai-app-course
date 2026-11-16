@@ -1,0 +1,20 @@
+{
+  "repository_edition": "1.0.0",
+  "date": "2026-11-16",
+  "source_package": "第一集完整学习资料 v2.0",
+  "business_code_changed": false,
+  "unchanged_sha256": {
+    "main.py": "8bd4599685e33caf1b54e89b206ce093268b3983bbd53babf0c5004f3934b5e0",
+    "ui.py": "c7b8c11652bdacbf9c44f2ba35577e62c6566d94994e1ef4df19d2625d702eb0",
+    "crypto_core.py": "500c202856457f0d7085bfe6cb60c0b5777b5094890c3c22cb896f476b3091c8",
+    "hello.py": "07219cd9561b41ce1f39209958076c471b17855679c968b42767b0122423c782",
+    "requirements.txt": "bd1a5d7bfa51c22a71df3785a293bd82118d66a079347d24f5b62796f8f73526",
+    "REQUIREMENTS.md": "4e6faecbcf5bdf305c6b380887e64c6a09e8bfca0c576b6bbe0b5479e6d093c8",
+    "DEVELOPMENT_LOG.md": "e49aa595eaa159cfdda7084ececdc508ef02cbac6cc6f372487a0b7bbf75335a",
+    "TEST_REPORT.md": "24bbe708ab49047540119e3d334dbdae95c9b5d38e4df2e0c887ca5a4282ed47",
+    "assets/app.ico": "4df54ee0aee18eb9af3354cb3ecc4470aa2effd18c46e463ca45a355841ef1c6",
+    "assets/app_256.png": "ab987eed9867665e7662b14d8bddb2d2785b70d019940ae09bf72305a304d94d",
+    "assets/icon_source.png": "654c4eb72c67a38c95623e9a75b1341ff723b968e5b2d83914e915e43ab443ba"
+  },
+  "verification": "沿用原资料包测试报告；本轮检查文件一致性、链接和提示词，不新增运行通过声明。"
+}
