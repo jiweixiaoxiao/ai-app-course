@@ -1,0 +1,15 @@
+{
+  "repository_edition": "1.0.0",
+  "date": "2026-11-20",
+  "source_package": "第二课完整学习资料 v1.0",
+  "zip_sha256": "eb17385542b6076a6a53a8207202603fcb1faba5a2e59a0a30624f731667c05e",
+  "business_code_changed": false,
+  "unchanged_sha256": {
+    "汇报网页/echarts.min.js": "e84270bd0cd5bdf60fefc26d00c2a391cb2e81f4d26a7a9ee16185a54773a3cf",
+    "汇报网页/index.html": "e95c54d3c8c87a37b6625a665f13b0495a1dcab17ff88aa30e67cbeac57e4320",
+    "第三方许可/ECharts-LICENSE.txt": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a",
+    "第三方许可/ECharts-NOTICE.txt": "fa99ac3af859d0e13166906dc53a73ad34a08898da7e8ae83407275496e9e30c",
+    "第三方许可/LICENSE-d3.txt": "e1211892da0b0e0585b7aebe8f98c1274fba15bafe47fa1f4ee8a7a502c06304"
+  },
+  "verification": "沿用离线包的 macOS Chrome 离线手动和自动测试及 04 号表复算；本次整理复核文件指纹、在线教程配图与提示词。Windows、手机及其他浏览器未实测。"
+}

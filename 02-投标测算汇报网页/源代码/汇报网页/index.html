@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云栖生活广场 · 年度物业测算引导台</title>
+  <script src="./echarts.min.js"></script>
+  <style>
+    :root{
+      --bg:#061323; --bg2:#0a1d35; --panel:rgba(13,31,54,.94); --panel2:#0e2745;
+      --line:rgba(157,196,232,.18); --line-strong:rgba(57,213,255,.34);
+      --text:#eaf5ff; --muted:#9db4cc; --faint:#6f88a3;
+      --cyan:#39d5ff; --blue:#2f7fff; --orange:#ffb454; --green:#35d39a; --red:#ff6b6b; --yellow:#ffd166;
+      --shadow:0 18px 45px rgba(0,0,0,.28); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;min-height:100%;background:radial-gradient(circle at 18% -10%,rgba(47,127,255,.28),transparent 38%),radial-gradient(circle at 92% 0%,rgba(57,213,255,.16),transparent 32%),linear-gradient(180deg,#07172a 0%,#061323 46%,#050f1d 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+    body{font-size:14px;line-height:1.55}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .app-shell{max-width:1680px;margin:0 auto;padding:18px 22px 34px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand-mark{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-weight:900;font-size:18px;color:#031321;background:linear-gradient(135deg,#7ce7ff,#2f7fff);box-shadow:0 10px 26px rgba(57,213,255,.25);flex:none}
+    .brand h1{margin:0;font-size:24px;letter-spacing:.5px;line-height:1.25}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .top-actions{display:flex;gap:10px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+    .btn{border:1px solid var(--line);color:var(--text);background:rgba(13,31,54,.82);border-radius:12px;padding:10px 15px;transition:.18s ease;white-space:nowrap}
+    .btn:hover{border-color:var(--line-strong);transform:translateY(-1px);background:rgba(18,45,76,.95)}
+    .btn.primary{background:linear-gradient(135deg,#27c8f5,#2377ff);border-color:rgba(124,231,255,.45);color:#fff;font-weight:800;box-shadow:0 10px 24px rgba(35,119,255,.28)}
+    .btn.primary.playing{background:linear-gradient(135deg,#ff8a5c,#ff5d73);box-shadow:0 10px 24px rgba(255,93,115,.24)}
+    .btn.ghost{background:rgba(255,255,255,.035)}
+    .btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+    .stepper{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;padding:10px;margin:0 -4px 14px;background:rgba(5,16,30,.88);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+    .step{display:flex;align-items:center;gap:9px;text-align:left;border:1px solid transparent;background:transparent;color:var(--muted);padding:9px 10px;border-radius:13px;min-width:0}
+    .step:hover{background:rgba(57,213,255,.08);color:var(--text)}
+    .step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;background:#102946;border:1px solid var(--line);font-weight:800;font-size:13px}
+    .step-text{min-width:0}.step-text b{display:block;font-size:13px;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.step-text small{display:block;color:var(--faint);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .step.active{background:linear-gradient(135deg,rgba(57,213,255,.18),rgba(47,127,255,.12));border-color:var(--line-strong);color:#fff}
+    .step.active .step-num{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#031321;border-color:transparent}
+    .step.done .step-num{background:rgba(53,211,154,.18);color:var(--green);border-color:rgba(53,211,154,.4)}
+    .step-container{min-height:420px}
+    .step-panel{display:none}.step-panel.active{display:block;animation:fadeUp .22s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .card{background:linear-gradient(180deg,rgba(18,42,72,.96),rgba(9,25,45,.96));border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+    .card h2,.card h3{margin:0 0 12px}.card h2{font-size:20px}.card h3{font-size:16px}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .card-head h3{margin:0}
+    .card-sub{color:var(--muted);font-size:12px;margin:-6px 0 12px}
+    .grid{display:grid;gap:14px}.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .mb-14{margin-bottom:14px}.mt-14{margin-top:14px}
+    .field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.wide{grid-column:1/-1}
+    .field>span,.slider-head span{color:var(--muted);font-size:13px;font-weight:650}
+    .field small{color:var(--faint);font-size:11.5px;line-height:1.4}
+    .input-wrap{position:relative}.input-wrap input{width:100%;background:#071a30;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:10px 46px 10px 12px;outline:none;transition:.16s}
+    .input-wrap input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(57,213,255,.12)}
+    .input-wrap em{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--faint);font-style:normal;font-size:12px;pointer-events:none}
+    input[type="range"]{width:100%;accent-color:var(--cyan);height:26px;cursor:pointer}
+    select{width:100%;background:#071a30;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 10px;outline:none}
+    .slider-box{padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(7,26,48,.58)}
+    .slider-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}.slider-head strong{color:var(--cyan);font-size:20px}
+    .inline-number{margin-top:8px}.inline-number input{padding-right:54px}
+    .metric{padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035);min-width:0}
+    .metric span{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}.metric b{font-size:24px;line-height:1.15;color:#fff}.metric small{color:var(--faint);font-size:12px;margin-left:4px}
+    .metric.accent b{color:var(--cyan)}.metric.orange b{color:var(--orange)}.metric.green b{color:var(--green)}.metric.red b{color:var(--red)}
+    .subtotal-bar{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin-top:16px;padding:15px 17px;border:1px solid rgba(57,213,255,.25);background:linear-gradient(135deg,rgba(57,213,255,.1),rgba(47,127,255,.06));border-radius:16px}
+    .subtotal-bar .label{color:var(--muted);font-size:13px}.subtotal-bar .value{font-size:26px;font-weight:900;color:#fff}.subtotal-items{display:flex;gap:22px;flex-wrap:wrap}.subtotal-items div span{display:block;color:var(--faint);font-size:11px}.subtotal-items div b{font-size:16px;color:var(--cyan)}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+    table.data-table{width:100%;border-collapse:collapse;min-width:760px;background:rgba(7,20,37,.42)}
+    .data-table th,.data-table td{padding:9px 10px;border-bottom:1px solid rgba(157,196,232,.12);text-align:left;vertical-align:middle;white-space:nowrap}
+    .data-table th{color:#bcd3ea;font-size:12px;background:rgba(18,42,72,.88);font-weight:750}.data-table td{font-size:13px}
+    .data-table tr:last-child td{border-bottom:0}.data-table input,.data-table select{min-width:76px;padding:8px 9px;background:#071a30;border:1px solid var(--line);border-radius:9px;color:var(--text)}
+    .data-table input.row-name{min-width:130px;background:transparent;border-color:transparent;padding-left:0;font-weight:650}
+    .data-table td.readonly{color:#bfeaff;font-variant-numeric:tabular-nums}.data-table tfoot td{font-weight:900;background:rgba(57,213,255,.07)}
+    .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--line);color:var(--muted)}
+    .tag.cyan{color:var(--cyan);background:rgba(57,213,255,.09);border-color:rgba(57,213,255,.25)}.tag.orange{color:var(--orange);background:rgba(255,180,84,.09);border-color:rgba(255,180,84,.25)}.tag.green{color:var(--green);background:rgba(53,211,154,.09);border-color:rgba(53,211,154,.25)}
+    .note{margin-top:12px;padding:11px 13px;border-left:3px solid var(--cyan);background:rgba(57,213,255,.07);border-radius:0 12px 12px 0;color:#b7cce0;font-size:12.5px}
+    .note.warn{border-left-color:var(--orange);background:rgba(255,180,84,.08)}
+    .formula{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#bfeaff;background:#050f1d;border:1px solid var(--line);border-radius:11px;padding:10px 12px;overflow-x:auto;margin-top:10px}
+    .guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.guide-item{padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.03)}.guide-item b{display:block;margin-bottom:6px}.guide-item span{color:var(--muted);font-size:12.5px}
+    .nav-bar{position:sticky;bottom:12px;z-index:25;display:grid;grid-template-columns:120px 1fr 120px;align-items:center;gap:12px;margin-top:16px;padding:11px 14px;background:rgba(5,16,30,.9);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+    .step-hint{text-align:center;color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .page-foot{color:var(--faint);font-size:11.5px;text-align:center;margin-top:14px}
+    .kpi-grid{display:grid;grid-template-columns:1fr 1fr 1.08fr;gap:14px;margin-bottom:14px}.gauge{height:226px}.conclusion-card{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;background:radial-gradient(circle at 50% 20%,rgba(255,107,107,.13),transparent 48%),linear-gradient(180deg,rgba(18,42,72,.96),rgba(9,25,45,.96))}
+    .verdict{font-size:42px;font-weight:950;letter-spacing:4px;line-height:1}.verdict.loss{color:var(--red)}.verdict.profit{color:var(--green)}.verdict.break{color:var(--yellow)}
+    .conclusion-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:6px}.conclusion-grid .metric{padding:11px}.conclusion-grid b{font-size:20px}
+    .result-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:14px;margin-bottom:14px}.chart{width:100%;height:330px}.chart.tall{height:390px}.chart-error{height:100%;display:grid;place-items:center;color:var(--orange);text-align:center;padding:20px;border:1px dashed rgba(255,180,84,.4);border-radius:14px}
+    .break-list{display:grid;gap:10px}.break-row{display:flex;justify-content:space-between;gap:14px;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035)}.break-row span{color:var(--muted)}.break-row b{color:#fff;font-variant-numeric:tabular-nums;text-align:right}
+    .curve-control{display:flex;align-items:center;gap:14px;margin:4px 0 8px}.curve-control span{color:var(--muted);white-space:nowrap}.curve-control input{flex:1}.curve-control strong{width:74px;text-align:right;color:var(--cyan)}
+    details.checklist{border:1px solid var(--line);border-radius:16px;background:rgba(13,31,54,.86);padding:14px 16px;margin-top:14px}details.checklist summary{font-weight:800;cursor:pointer;color:#fff}
+    .check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}.check-item{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.03)}.check-item b{display:block;margin-bottom:5px}.check-item .status{color:var(--yellow);font-size:12px}.check-item p{margin:5px 0 0;color:var(--muted);font-size:12.5px}
+    @media (max-width:1280px){.cols-4{grid-template-columns:repeat(2,1fr)}.guide-grid{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr 1fr}.conclusion-card{grid-column:1/-1}.result-grid{grid-template-columns:1fr}.check-grid{grid-template-columns:1fr}}
+    @media (max-width:900px){.app-shell{padding:14px}.topbar{flex-direction:column;align-items:stretch}.top-actions{justify-content:stretch}.top-actions .btn{flex:1}.stepper{overflow-x:auto;grid-template-columns:repeat(7,168px)}.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}.guide-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr}.nav-bar{grid-template-columns:92px 1fr 92px}.step-hint{display:none}.check-grid{grid-template-columns:1fr}.brand h1{font-size:20px}}
+  </style>
+</head>
+<body>
+  <div class="app-shell" data-canvas-root="yunqi-guided-calculator">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">云栖</div>
+        <div>
+          <h1>云栖生活广场 · 物业年度测算引导台</h1>
+          <p>包干制年度测算｜课程虚构教学数据｜本地离线运行</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="clearBtn" class="btn ghost" type="button">清空填写</button>
+        <button id="resetBtn" class="btn ghost" type="button">恢复云栖样例</button>
+        <button id="playBtn" class="btn primary" type="button">▶ 自动演示录入</button>
+      </div>
+    </header>
+
+    <nav id="stepper" class="stepper" aria-label="测算步骤"></nav>
+    <main id="stepContainer" class="step-container"></main>
+
+    <footer class="nav-bar">
+      <button id="prevBtn" class="btn ghost" type="button">上一步</button>
+      <div id="stepHint" class="step-hint"></div>
+      <button id="nextBtn" class="btn primary" type="button">下一步</button>
+    </footer>
+    <div class="page-foot">核算基准：04-全委包干经济测算模型-教学版.xlsx｜本网页不修改原始 Excel；图表库使用同目录 echarts.min.js，断网可打开。</div>
+  </div>
+
+  <script>
+/* ===== 1. 默认数据、工具函数与纯计算引擎 ===== */
+const DEFAULT_STATE = {
+  "meta": {
+    "projectName": "云栖生活广场",
+    "subtitle": "包干制项目年度盈亏平衡测算 · 教学演示",
+    "period": "年度测算",
+    "mode": "包干制",
+    "disclaimer": "课程虚构数据，仅用于教学演示；3% 综合税费为教学占位口径，不代表实际税务测算或正式报价。"
+  },
+  "params": {
+    "residentialArea": 40000,
+    "commercialArea": 8000,
+    "residentialPrice": 2.5,
+    "commercialPrice": 5.0,
+    "billingMonths": 12,
+    "propertyCollectionRate": 0.95,
+    "parkingSpaces": 180,
+    "parkingPrice": 150.0,
+    "parkingCollectionRate": 0.9,
+    "multiIncome": 120000.0,
+    "subsidyIncome": 0.0,
+    "managementFee": 80000.0,
+    "contingencyRate": 0.02,
+    "taxRate": 0.03,
+    "targetNetMargin": 0.08,
+    "staffAnnualGrowth": 0.02,
+    "opsAnnualGrowth": 0.06,
+    "extraMaintenanceFromYear5": 60000.0,
+    "payrollMonths": 12
+  },
+  "staff": [
+    {
+      "id": "staff_5",
+      "excelRow": 5,
+      "department": "综合部",
+      "role": "项目经理",
+      "headcount": 1,
+      "baseSalary": 8500.0,
+      "postSalary": 0.0,
+      "socialInsurance": 1200.0,
+      "housingFund": 300.0,
+      "welfare": 0.0,
+      "yearEndBonus": 8500.0,
+      "cachedMonthlyCostPerPerson": 10000.0,
+      "cachedAnnualCostPerPerson": 128500.0,
+      "cachedAnnualRowCost": 128500.0
+    },
+    {
+      "id": "staff_6",
+      "excelRow": 6,
+      "department": "客服部",
+      "role": "客服专员",
+      "headcount": 2,
+      "baseSalary": 4500.0,
+      "postSalary": 0.0,
+      "socialInsurance": 800.0,
+      "housingFund": 200.0,
+      "welfare": 0.0,
+      "yearEndBonus": 4500.0,
+      "cachedMonthlyCostPerPerson": 5500.0,
+      "cachedAnnualCostPerPerson": 70500.0,
+      "cachedAnnualRowCost": 141000.0
+    },
+    {
+      "id": "staff_7",
+      "excelRow": 7,
+      "department": "工程部",
+      "role": "维修技工",
+      "headcount": 2,
+      "baseSalary": 6000.0,
+      "postSalary": 0.0,
+      "socialInsurance": 1100.0,
+      "housingFund": 300.0,
+      "welfare": 0.0,
+      "yearEndBonus": 6000.0,
+      "cachedMonthlyCostPerPerson": 7400.0,
+      "cachedAnnualCostPerPerson": 94800.0,
+      "cachedAnnualRowCost": 189600.0
+    },
+    {
+      "id": "staff_8",
+      "excelRow": 8,
+      "department": "秩序部",
+      "role": "秩序维护员",
+      "headcount": 8,
+      "baseSalary": 4500.0,
+      "postSalary": 0.0,
+      "socialInsurance": 900.0,
+      "housingFund": 200.0,
+      "welfare": 0.0,
+      "yearEndBonus": 4500.0,
+      "cachedMonthlyCostPerPerson": 5600.0,
+      "cachedAnnualCostPerPerson": 71700.0,
+      "cachedAnnualRowCost": 573600.0
+    },
+    {
+      "id": "staff_9",
+      "excelRow": 9,
+      "department": "环境部",
+      "role": "保洁员",
+      "headcount": 8,
+      "baseSalary": 3500.0,
+      "postSalary": 0.0,
+      "socialInsurance": 750.0,
+      "housingFund": 150.0,
+      "welfare": 0.0,
+      "yearEndBonus": 3500.0,
+      "cachedMonthlyCostPerPerson": 4400.0,
+      "cachedAnnualCostPerPerson": 56300.0,
+      "cachedAnnualRowCost": 450400.0
+    },
+    {
+      "id": "staff_10",
+      "excelRow": 10,
+      "department": "绿化部",
+      "role": "绿化养护员",
+      "headcount": 1,
+      "baseSalary": 4000.0,
+      "postSalary": 0.0,
+      "socialInsurance": 800.0,
+      "housingFund": 200.0,
+      "welfare": 0.0,
+      "yearEndBonus": 4000.0,
+      "cachedMonthlyCostPerPerson": 5000.0,
+      "cachedAnnualCostPerPerson": 64000.0,
+      "cachedAnnualRowCost": 64000.0
+    }
+  ],
+  "ops": [
+    {
+      "id": "ops_5",
+      "excelRow": 5,
+      "group": "maintenance",
+      "name": "电梯维保及年检",
+      "quantity": 6.0,
+      "unitPrice": 4500.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 27000.0,
+      "cachedIncludedAnnual": 27000.0
+    },
+    {
+      "id": "ops_6",
+      "excelRow": 6,
+      "group": "maintenance",
+      "name": "消防维保检测",
+      "quantity": 1.0,
+      "unitPrice": 36000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 36000.0,
+      "cachedIncludedAnnual": 36000.0
+    },
+    {
+      "id": "ops_7",
+      "excelRow": 7,
+      "group": "maintenance",
+      "name": "高压配电房维保",
+      "quantity": 1.0,
+      "unitPrice": 18000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 18000.0,
+      "cachedIncludedAnnual": 18000.0
+    },
+    {
+      "id": "ops_8",
+      "excelRow": 8,
+      "group": "maintenance",
+      "name": "生活水箱清洗",
+      "quantity": 1.0,
+      "unitPrice": 9600.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 9600.0,
+      "cachedIncludedAnnual": 9600.0
+    },
+    {
+      "id": "ops_9",
+      "excelRow": 9,
+      "group": "maintenance",
+      "name": "弱电监控维保",
+      "quantity": 1.0,
+      "unitPrice": 18000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 18000.0,
+      "cachedIncludedAnnual": 18000.0
+    },
+    {
+      "id": "ops_10",
+      "excelRow": 10,
+      "group": "maintenance",
+      "name": "日常维修材料",
+      "quantity": 12.0,
+      "unitPrice": 3000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 36000.0,
+      "cachedIncludedAnnual": 36000.0
+    },
+    {
+      "id": "ops_11",
+      "excelRow": 11,
+      "group": "daily",
+      "name": "清洁耗材",
+      "quantity": 12.0,
+      "unitPrice": 2500.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 30000.0,
+      "cachedIncludedAnnual": 30000.0
+    },
+    {
+      "id": "ops_12",
+      "excelRow": 12,
+      "group": "daily",
+      "name": "绿化养护耗材",
+      "quantity": 12.0,
+      "unitPrice": 2000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 24000.0,
+      "cachedIncludedAnnual": 24000.0
+    },
+    {
+      "id": "ops_13",
+      "excelRow": 13,
+      "group": "daily",
+      "name": "办公及通讯",
+      "quantity": 12.0,
+      "unitPrice": 2000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 24000.0,
+      "cachedIncludedAnnual": 24000.0
+    },
+    {
+      "id": "ops_14",
+      "excelRow": 14,
+      "group": "daily",
+      "name": "公众责任保险",
+      "quantity": 1.0,
+      "unitPrice": 12000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 12000.0,
+      "cachedIncludedAnnual": 12000.0
+    },
+    {
+      "id": "ops_15",
+      "excelRow": 15,
+      "group": "daily",
+      "name": "社区活动",
+      "quantity": 1.0,
+      "unitPrice": 18000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 18000.0,
+      "cachedIncludedAnnual": 18000.0
+    },
+    {
+      "id": "ops_16",
+      "excelRow": 16,
+      "group": "daily",
+      "name": "其他运营物料",
+      "quantity": 1.0,
+      "unitPrice": 10000.0,
+      "party": "乙方",
+      "cachedNominalAnnual": 10000.0,
+      "cachedIncludedAnnual": 10000.0
+    },
+    {
+      "id": "ops_17",
+      "excelRow": 17,
+      "group": "daily",
+      "name": "开荒保洁",
+      "quantity": 1.0,
+      "unitPrice": 30000.0,
+      "party": "甲方",
+      "cachedNominalAnnual": 30000.0,
+      "cachedIncludedAnnual": 0.0
+    }
+  ],
+  "energy": [
+    {
+      "id": "energy_5",
+      "excelRow": 5,
+      "name": "公共照明",
+      "quantity": 120.0,
+      "powerKw": 0.04,
+      "dailyHours": 10.0,
+      "annualDays": 365.0,
+      "loadFactor": 0.9,
+      "electricityPrice": 0.85,
+      "cachedAnnualKwh": 15768.0,
+      "cachedAnnualCost": 13402.8
+    },
+    {
+      "id": "energy_6",
+      "excelRow": 6,
+      "name": "电梯",
+      "quantity": 6.0,
+      "powerKw": 7.5,
+      "dailyHours": 6.0,
+      "annualDays": 365.0,
+      "loadFactor": 0.35,
+      "electricityPrice": 0.85,
+      "cachedAnnualKwh": 34492.5,
+      "cachedAnnualCost": 29318.625
+    },
+    {
+      "id": "energy_7",
+      "excelRow": 7,
+      "name": "生活水泵",
+      "quantity": 4.0,
+      "powerKw": 5.5,
+      "dailyHours": 4.0,
+      "annualDays": 365.0,
+      "loadFactor": 0.6,
+      "electricityPrice": 0.85,
+      "cachedAnnualKwh": 19272.0,
+      "cachedAnnualCost": 16381.2
+    },
+    {
+      "id": "energy_8",
+      "excelRow": 8,
+      "name": "通风设备",
+      "quantity": 8.0,
+      "powerKw": 1.5,
+      "dailyHours": 8.0,
+      "annualDays": 250.0,
+      "loadFactor": 0.7,
+      "electricityPrice": 0.85,
+      "cachedAnnualKwh": 16800.0,
+      "cachedAnnualCost": 14280.0
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset_5",
+      "excelRow": 5,
+      "name": "工程工具",
+      "quantity": 4.0,
+      "unitPrice": 6000.0,
+      "salvageValue": 0.0,
+      "depreciationYears": 5.0,
+      "cachedOriginalValue": 24000.0,
+      "cachedAnnualDepreciation": 4800.0
+    },
+    {
+      "id": "asset_6",
+      "excelRow": 6,
+      "name": "办公电脑",
+      "quantity": 8.0,
+      "unitPrice": 4000.0,
+      "salvageValue": 0.0,
+      "depreciationYears": 4.0,
+      "cachedOriginalValue": 32000.0,
+      "cachedAnnualDepreciation": 8000.0
+    },
+    {
+      "id": "asset_7",
+      "excelRow": 7,
+      "name": "清洁设备",
+      "quantity": 2.0,
+      "unitPrice": 12000.0,
+      "salvageValue": 0.0,
+      "depreciationYears": 5.0,
+      "cachedOriginalValue": 24000.0,
+      "cachedAnnualDepreciation": 4800.0
+    }
+  ],
+  "checklist": [
+    {
+      "id": "check_5",
+      "excelRow": 5,
+      "category": "收费标准和收缴率是否有依据",
+      "status": "待核实",
+      "note": "本包均为虚构假设；真实场景需合同与历史收缴记录"
+    },
+    {
+      "id": "check_6",
+      "excelRow": 6,
+      "category": "合作方资质与付款能力",
+      "status": "待核实",
+      "note": "真实场景需合作条款和资信资料"
+    },
+    {
+      "id": "check_7",
+      "excelRow": 7,
+      "category": "当地收费规定及税务口径",
+      "status": "待核实",
+      "note": "由实际业务与财务人员确认，不能套用本包占位税费率"
+    },
+    {
+      "id": "check_8",
+      "excelRow": 8,
+      "category": "人员编制与服务标准是否匹配",
+      "status": "待核实",
+      "note": "岗位职责、班次与工作量"
+    },
+    {
+      "id": "check_9",
+      "excelRow": 9,
+      "category": "电梯维保与设备老化费用",
+      "status": "待核实",
+      "note": "设备台账、维保报价、设备年限"
+    },
+    {
+      "id": "check_10",
+      "excelRow": 10,
+      "category": "甲供范围和垫资安排",
+      "status": "待核实",
+      "note": "合同责任划分、到账计划与支出时点"
+    }
+  ]
+};
+const rootObject = typeof window !== 'undefined' ? window : globalThis;
+
+function clone(value){
+  return JSON.parse(JSON.stringify(value));
+}
+function num(value){
+  if(value === '' || value === null || value === undefined) return 0;
+  const n = typeof value === 'number' ? value : parseFloat(value);
+  return Number.isFinite(n) ? n : 0;
+}
+function esc(value){
+  return String(value ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function fixed(value, digits=2){
+  return num(value).toLocaleString('zh-CN',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+}
+function wan(valueYuan, digits=2){
+  return fixed(num(valueYuan)/10000, digits);
+}
+function signedWan(valueYuan, digits=2){
+  const v = num(valueYuan)/10000;
+  return (v > 0 ? '+' : '') + fixed(v, digits);
+}
+function pct(valueDecimal, digits=2){
+  return fixed(num(valueDecimal)*100, digits) + '%';
+}
+function formatByFmt(value, fmt){
+  if(fmt === 'yuan0') return '¥' + fixed(value, 0);
+  if(fmt === 'yuan2') return '¥' + fixed(value, 2);
+  if(fmt === 'wan2') return wan(value, 2);
+  if(fmt === 'num0') return fixed(value, 0);
+  if(fmt === 'num2') return fixed(value, 2);
+  if(fmt === 'pct2') return pct(value, 2);
+  return value ?? '';
+}
+
+function calculateModel(inputState, overrides){
+  const source = inputState || DEFAULT_STATE;
+  const s = clone(source);
+  if(overrides && overrides.params){
+    s.params = Object.assign({}, s.params, overrides.params);
+  }
+  const p = s.params || {};
+  const P = key => num(p[key]);
+  const billingMonths = P('billingMonths');
+  const payrollMonths = P('payrollMonths');
+
+  // 收入：住宅、商业共用物业费综合收缴率；车位单独使用车位收缴率。
+  const residentialSaturated = P('residentialArea') * P('residentialPrice') * billingMonths;
+  const commercialSaturated = P('commercialArea') * P('commercialPrice') * billingMonths;
+  const parkingSaturated = P('parkingSpaces') * P('parkingPrice') * billingMonths;
+  const residentialIncome = residentialSaturated * P('propertyCollectionRate');
+  const commercialIncome = commercialSaturated * P('propertyCollectionRate');
+  const parkingIncome = parkingSaturated * P('parkingCollectionRate');
+  const multiIncome = P('multiIncome');
+  const subsidyIncome = P('subsidyIncome');
+  const revenue = residentialIncome + commercialIncome + parkingIncome + multiIncome + subsidyIncome;
+
+  // 人员成本
+  const staffRows = (s.staff || []).map(r => {
+    const headcount = num(r.headcount);
+    const monthlyCostPerPerson = num(r.baseSalary) + num(r.postSalary) + num(r.socialInsurance) +
+      num(r.housingFund) + num(r.welfare);
+    const annualCostPerPerson = monthlyCostPerPerson * payrollMonths + num(r.yearEndBonus);
+    return Object.assign({}, r, {
+      headcount,
+      monthlyCostPerPerson,
+      annualCostPerPerson,
+      annualRowCost: headcount * annualCostPerPerson
+    });
+  });
+  const staffCount = staffRows.reduce((sum,r) => sum + r.headcount, 0);
+  const staffCost = staffRows.reduce((sum,r) => sum + r.annualRowCost, 0);
+
+  // 运营费用：同一 opsRows 集合只汇总一次；甲方责任计入 0。
+  const opsRows = (s.ops || []).map(r => {
+    const quantity = num(r.quantity);
+    const unitPrice = num(r.unitPrice);
+    const nominalAnnual = quantity * unitPrice;
+    const includedAnnual = r.party === '甲方' ? 0 : nominalAnnual;
+    return Object.assign({}, r, {quantity, unitPrice, nominalAnnual, includedAnnual});
+  });
+  const opsCost = opsRows.reduce((sum,r) => sum + r.includedAnnual, 0);
+  const maintenanceCost = opsRows.filter(r => r.group === 'maintenance').reduce((sum,r) => sum + r.includedAnnual, 0);
+  const dailyOpsCost = opsRows.filter(r => r.group === 'daily').reduce((sum,r) => sum + r.includedAnnual, 0);
+
+  // 公共能耗
+  const energyRows = (s.energy || []).map(r => {
+    const annualKwh = num(r.quantity) * num(r.powerKw) * num(r.dailyHours) * num(r.annualDays) * num(r.loadFactor);
+    const annualCost = annualKwh * num(r.electricityPrice);
+    return Object.assign({}, r, {annualKwh, annualCost});
+  });
+  const energyCost = energyRows.reduce((sum,r) => sum + r.annualCost, 0);
+
+  // 物资折旧
+  const assetRows = (s.assets || []).map(r => {
+    const originalValue = num(r.quantity) * num(r.unitPrice);
+    const depreciationYears = num(r.depreciationYears);
+    const annualDepreciation = depreciationYears > 0 ? (originalValue - num(r.salvageValue)) / depreciationYears : 0;
+    return Object.assign({}, r, {originalValue, annualDepreciation});
+  });
+  const depreciationCost = assetRows.reduce((sum,r) => sum + r.annualDepreciation, 0);
+
+  // 汇总：不可预见费不含管理酬金和税费；保本固定成本不含随收入变化的综合税费。
+  const managementFee = P('managementFee');
+  const contingencyCost = (staffCost + opsCost + energyCost + depreciationCost) * P('contingencyRate');
+  const taxCost = revenue * P('taxRate');
+  const totalCost = staffCost + opsCost + energyCost + depreciationCost + managementFee + contingencyCost + taxCost;
+  const netProfit = revenue - totalCost;
+  const netMargin = revenue > 0 ? netProfit / revenue : 0;
+  const fixedCost = staffCost + opsCost + energyCost + depreciationCost + managementFee + contingencyCost;
+
+  const taxDenominator = 1 - P('taxRate');
+  const targetDenominator = taxDenominator - P('targetNetMargin');
+  const safeDivide = (x, d) => Number.isFinite(d) && d > 0 ? x / d : 0;
+  const collectedPropertyIncome = residentialIncome + commercialIncome;
+  const collectedOperatingIncome = collectedPropertyIncome + parkingIncome;
+
+  // 多经路径：锁定收缴率，反解多经总额。
+  const beMultiTotal = Math.max(0,
+    safeDivide(fixedCost, taxDenominator) - collectedOperatingIncome - subsidyIncome
+  );
+  const beMultiNew = Math.max(0, beMultiTotal - multiIncome);
+  const targetMultiTotal = Math.max(0,
+    safeDivide(fixedCost, targetDenominator) - collectedOperatingIncome - subsidyIncome
+  );
+
+  // 物业收缴率路径：锁定车位收入、现有多经和补贴，只反解住宅商业综合收缴率。
+  const saturatedPropertyIncome = residentialSaturated + commercialSaturated;
+  const bePropertyRate = saturatedPropertyIncome > 0 ? Math.max(0,
+    (safeDivide(fixedCost, taxDenominator) - parkingIncome - multiIncome - subsidyIncome) / saturatedPropertyIncome
+  ) : 0;
+  const targetPropertyRate = saturatedPropertyIncome > 0 ? Math.max(0,
+    (safeDivide(fixedCost, targetDenominator) - parkingIncome - multiIncome - subsidyIncome) / saturatedPropertyIncome
+  ) : 0;
+
+  const totalArea = P('residentialArea') + P('commercialArea');
+  const weightedPrice = totalArea > 0
+    ? (P('residentialArea') * P('residentialPrice') + P('commercialArea') * P('commercialPrice')) / totalArea
+    : 0;
+
+  return {
+    params: p,
+    totalArea,
+    totalAreaWan: totalArea / 10000,
+    weightedPrice,
+    residentialSaturated, commercialSaturated, parkingSaturated,
+    residentialIncome, commercialIncome, parkingIncome, multiIncome, subsidyIncome, revenue,
+    staffRows, staffCount, staffCost,
+    opsRows, opsCost, maintenanceCost, dailyOpsCost,
+    energyRows, energyCost,
+    assetRows, depreciationCost,
+    managementFee, contingencyCost, taxCost, totalCost, netProfit, netMargin, fixedCost,
+    beMultiTotal, beMultiNew, targetMultiTotal, bePropertyRate, targetPropertyRate
+  };
+}
+
+function createEmptyState(){
+  const s = clone(DEFAULT_STATE);
+  ['residentialArea','commercialArea','residentialPrice','commercialPrice','billingMonths',
+   'propertyCollectionRate','parkingSpaces','parkingPrice','parkingCollectionRate','multiIncome',
+   'subsidyIncome','managementFee','contingencyRate','taxRate','targetNetMargin','payrollMonths'
+  ].forEach(k => { s.params[k] = ''; });
+  s.staff.forEach(r => {
+    ['headcount','baseSalary','postSalary','socialInsurance','housingFund','welfare','yearEndBonus']
+      .forEach(k => { r[k] = ''; });
+  });
+  s.ops.forEach(r => { r.quantity = ''; r.unitPrice = ''; });
+  s.energy.forEach(r => {
+    ['quantity','powerKw','dailyHours','annualDays','loadFactor','electricityPrice'].forEach(k => { r[k] = ''; });
+  });
+  s.assets.forEach(r => {
+    ['quantity','unitPrice','salvageValue','depreciationYears'].forEach(k => { r[k] = ''; });
+  });
+  return s;
+}
+
+rootObject.YQCalc = {calculateModel, createEmptyState, clone, DEFAULT_STATE};
+
+;
+/* ===== 2. 步骤 1–4 模板 ===== */
+function field(o){
+  const raw = o.value;
+  let val = raw == null ? '' : raw;
+  if(raw !== '' && raw != null){
+    if(o.bindType === 'percent') val = num(raw) * 100;
+    if(o.bindType === 'wanYuan') val = num(raw) / 10000;
+  }
+  const inputType = o.type || 'number';
+  return `<label class="field ${o.wide ? 'wide' : ''}">
+    <span>${esc(o.label)}</span>
+    <div class="input-wrap">
+      <input type="${inputType}" step="${o.step ?? 'any'}" ${o.min != null ? `min="${o.min}"` : ''} ${o.max != null ? `max="${o.max}"` : ''}
+        data-bind="${esc(o.path)}" ${o.bindType ? `data-bind-type="${o.bindType}"` : ''}
+        value="${esc(val)}" placeholder="${esc(o.placeholder || '')}">
+      ${o.unit ? `<em>${esc(o.unit)}</em>` : ''}
+    </div>
+    ${o.hint ? `<small>${esc(o.hint)}</small>` : ''}
+  </label>`;
+}
+function tableInput(path, value, opts={}){
+  return `<input type="number" class="${opts.cls || ''}" data-bind="${esc(path)}" value="${esc(value ?? '')}"
+    step="${opts.step || 'any'}" ${opts.min != null ? `min="${opts.min}"` : ''} ${opts.max != null ? `max="${opts.max}"` : ''}>`;
+}
+function partySelect(path, value){
+  return `<select data-bind="${esc(path)}">
+    ${['乙方','甲方'].map(x => `<option value="${x}" ${x === value ? 'selected' : ''}>${x}</option>`).join('')}
+  </select>`;
+}
+function metricCard(label, calcKey, unit, cls=''){
+  return `<div class="metric ${cls}"><span>${esc(label)}</span><b data-calc="${calcKey}">—</b>${unit ? `<small>${esc(unit)}</small>` : ''}</div>`;
+}
+
+function tplOverview(){
+  const guides = [
+    ['1 项目概况','确认演示项目、合同口径和教学虚构提示。'],
+    ['2 体量与单价','录入住宅/商业面积、物业费单价、收费月数和车位参数。'],
+    ['3 收入假设','房屋物业费与车位收缴率分开，多经和补贴按年度总额录入。'],
+    ['4 人员编制','按六类岗位录入人数、月薪、社保公积金、福利和年终奖。'],
+    ['5 设备维保损耗','录入维保合同、公共能耗、物资折旧，甲方责任计入 0。'],
+    ['6 运营与税费','录入日常运营费、管理酬金、不可预见费率和教学综合税费率。'],
+    ['7 测算结果','查看盈亏、保本保利、收入成本构成和收缴率影响曲线。']
+  ];
+  return `<section class="step-panel active">
+    <div class="grid cols-3 mb-14">
+      <div class="card">
+        <div class="card-head"><h2>云栖生活广场</h2><span class="tag cyan">年度测算</span></div>
+        ${field({label:'页面项目名称（仅影响展示）', path:'meta.projectName', value:state.meta.projectName, type:'text'})}
+        <div class="mt-14" style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag cyan">包干制</span><span class="tag orange">课程虚构数据</span><span class="tag green">本地离线</span>
+        </div>
+        <p class="note">${esc(state.meta.disclaimer)}</p>
+      </div>
+      ${metricCard('基准年度收入','revenueWan','万元/年','accent')}
+      ${metricCard('基准年度成本','totalCostWan','万元/年','orange')}
+    </div>
+    <div class="card mb-14">
+      <div class="card-head"><h3>现场演示路径</h3><span class="tag">客户填六步，第七步看结果</span></div>
+      <div class="guide-grid">
+        ${guides.map(g => `<div class="guide-item"><b>${g[0]}</b><span>${g[1]}</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="note warn">本次现场只演示云栖生活广场，核算基准为 <b>04-全委包干经济测算模型-教学版.xlsx</b>；02、03 晴川数据不进入本页面。点击右上角“自动演示录入”会从第 1 步开始按顺序展示当前已填内容，不会覆盖输入；播放中点击顶部任一步骤立即停止。</div>
+  </section>`;
+}
+
+function tplVolume(){
+  const p = state.params;
+  return `<section class="step-panel active">
+    <div class="card mb-14">
+      <div class="card-head"><div><h2>第 2 步：体量与单价</h2><p class="card-sub">对应 Excel「项目参数」B5:B12，先确定收费面积、单价和车位规模。</p></div><span class="tag cyan">面积 / 单价 / 月数</span></div>
+      <div class="grid cols-4">
+        ${field({label:'住宅收费面积', path:'params.residentialArea', value:p.residentialArea, unit:'㎡', step:1, min:0})}
+        ${field({label:'商业收费面积', path:'params.commercialArea', value:p.commercialArea, unit:'㎡', step:1, min:0})}
+        ${field({label:'住宅收费标准', path:'params.residentialPrice', value:p.residentialPrice, unit:'元/㎡/月', step:0.01, min:0})}
+        ${field({label:'商业收费标准', path:'params.commercialPrice', value:p.commercialPrice, unit:'元/㎡/月', step:0.01, min:0})}
+        ${field({label:'收费月数', path:'params.billingMonths', value:p.billingMonths, unit:'月', step:1, min:1, max:12, hint:'Excel 数据验证：1–12 的整数。'})}
+        ${field({label:'车位数量', path:'params.parkingSpaces', value:p.parkingSpaces, unit:'个', step:1, min:0})}
+        ${field({label:'车位收费标准', path:'params.parkingPrice', value:p.parkingPrice, unit:'元/个/月', step:0.01, min:0})}
+      </div>
+    </div>
+    <div class="grid cols-3 mb-14">
+      ${metricCard('总收费面积','totalAreaWan','万㎡','accent')}
+      ${metricCard('住宅商业加权单价','weightedPrice','元/㎡/月','')}
+      ${metricCard('饱和收入合计','saturatedRevenueWan','万元/年','green')}
+      ${metricCard('住宅饱和年收入','resSatWan','万元/年')}
+      ${metricCard('商业饱和年收入','comSatWan','万元/年')}
+      ${metricCard('车位饱和年收入','parkSatWan','万元/年')}
+    </div>
+    <div class="formula">住宅饱和收入 = 住宅面积 × 住宅单价 × 收费月数；商业同理；车位饱和收入 = 车位数量 × 车位月费 × 收费月数。收缴率在第 3 步录入。</div>
+  </section>`;
+}
+
+function tplRevenue(){
+  const p = state.params;
+  return `<section class="step-panel active">
+    <div class="grid cols-3 mb-14">
+      <div class="slider-box">
+        <div class="slider-head"><span>物业费综合收缴率（住宅 + 商业）</span><strong data-calc="propertyRatePct">—</strong></div>
+        <input type="range" min="0" max="100" step="1" data-bind="params.propertyCollectionRate" data-bind-type="percent" value="${esc(num(p.propertyCollectionRate)*100)}">
+        <div class="inline-number">${field({label:'精确输入', path:'params.propertyCollectionRate', value:p.propertyCollectionRate, bindType:'percent', unit:'%', step:0.1, min:0, max:100})}</div>
+        <small class="note">住宅和商业物业费共用此收缴率，对应项目参数 B10。</small>
+      </div>
+      <div class="slider-box">
+        <div class="slider-head"><span>车位收缴率（仅车位服务费）</span><strong data-calc="parkingRatePct">—</strong></div>
+        <input type="range" min="0" max="100" step="1" data-bind="params.parkingCollectionRate" data-bind-type="percent" value="${esc(num(p.parkingCollectionRate)*100)}">
+        <div class="inline-number">${field({label:'精确输入', path:'params.parkingCollectionRate', value:p.parkingCollectionRate, bindType:'percent', unit:'%', step:0.1, min:0, max:100})}</div>
+        <small class="note warn">车位收入不得使用住宅物业费收缴率，对应项目参数 B13。</small>
+      </div>
+      <div class="card">
+        <h3>年度其他收入</h3>
+        <div class="grid" style="gap:12px">
+          ${field({label:'多种经营及其他收入', path:'params.multiIncome', value:p.multiIncome, bindType:'wanYuan', unit:'万元/年', step:0.01, min:0, hint:'项目参数 B14，年度总额，不乘收缴率。'})}
+          ${field({label:'其他补贴收入', path:'params.subsidyIncome', value:p.subsidyIncome, bindType:'wanYuan', unit:'万元/年', step:0.01, min:0, hint:'项目参数 B15，年度总额，不乘收缴率。'})}
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>年度实收收入测算</h3><span class="tag cyan">收入测算 G5:G10</span></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>收入项</th><th>计算口径</th><th style="text-align:right">年度金额（万元）</th></tr></thead>
+          <tbody>
+            <tr><td>住宅物业费</td><td class="readonly">住宅饱和收入 × 物业费综合收缴率</td><td class="readonly" style="text-align:right" data-calc="resIncomeWan"></td></tr>
+            <tr><td>商业物业费</td><td class="readonly">商业饱和收入 × 物业费综合收缴率</td><td class="readonly" style="text-align:right" data-calc="comIncomeWan"></td></tr>
+            <tr><td>车位服务费</td><td class="readonly">车位饱和收入 × 车位收缴率</td><td class="readonly" style="text-align:right" data-calc="parkIncomeWan"></td></tr>
+            <tr><td>多种经营及其他收入</td><td class="readonly">按年度总额直接计入</td><td class="readonly" style="text-align:right" data-calc="multiIncomeWan"></td></tr>
+            <tr><td>其他补贴收入</td><td class="readonly">按年度总额直接计入</td><td class="readonly" style="text-align:right" data-calc="subsidyIncomeWan"></td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">预计年度实收收入合计</td><td style="text-align:right;color:var(--cyan)" data-calc="revenueWan"></td></tr></tfoot>
+        </table>
+      </div>
+      <div class="subtotal-bar">
+        <div class="label">第 3 步小计：预计实收收入</div>
+        <div class="subtotal-items">
+          <div><span>住宅</span><b data-calc="resIncomeWan"></b></div>
+          <div><span>商业</span><b data-calc="comIncomeWan"></b></div>
+          <div><span>车位</span><b data-calc="parkIncomeWan"></b></div>
+        </div>
+        <div class="value"><span data-calc="revenueWanBig"></span> 万元/年</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function tplStaff(){
+  const p = state.params;
+  const numericFields = [
+    ['headcount','人数',1],['baseSalary','基本月薪',0.01],['postSalary','岗位工资',0.01],
+    ['socialInsurance','社保/月',0.01],['housingFund','公积金/月',0.01],['welfare','福利/月',0.01],['yearEndBonus','年终奖/人',0.01]
+  ];
+  return `<section class="step-panel active">
+    <div class="card mb-14">
+      <div class="card-head">
+        <div><h2>第 4 步：人员编制</h2><p class="card-sub">对应「人员成本」第 5–10 行；v1 固定六类岗位，可改人数和薪酬数值。</p></div>
+        <div style="width:210px">${field({label:'人员计薪月数（B23）', path:'params.payrollMonths', value:p.payrollMonths, unit:'月', step:1, min:1, max:12})}</div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr>
+            <th>部门</th><th>岗位</th><th>人数</th><th>基本月薪</th><th>岗位工资</th><th>社保/月</th><th>公积金/月</th><th>福利/月</th><th>年终奖/人</th><th>月成本/人</th><th>年度费用</th>
+          </tr></thead>
+          <tbody>
+            ${state.staff.map((r,i) => `<tr>
+              <td>${esc(r.department)}</td>
+              <td>${esc(r.role)}</td>
+              ${numericFields.map(([key,,step]) => `<td>${tableInput(`staff.${i}.${key}`, r[key], {step, min:0})}</td>`).join('')}
+              <td class="readonly" data-row-group="staffRows" data-row="${r.id}" data-field="monthlyCostPerPerson" data-fmt="yuan0"></td>
+              <td class="readonly" data-row-group="staffRows" data-row="${r.id}" data-field="annualRowCost" data-fmt="yuan0"></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="formula">月人工成本/人 J = 基本月薪 + 岗位工资 + 社保 + 公积金 + 福利；年人工成本/人 K = J × 计薪月数 + 年终奖；岗位年度费用 L = 人数 × K。</div>
+      <div class="subtotal-bar">
+        <div class="label">第 4 步小计：人员编制与年度费用</div>
+        <div class="subtotal-items">
+          <div><span>在岗总人数</span><b data-calc="staffCount"></b></div>
+          <div><span>年度人员费用</span><b data-calc="staffCostWan"></b></div>
+        </div>
+        <div class="value"><span data-calc="staffCostWanBig"></span> 万元/年</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+;
+/* ===== 3. 步骤 5–7 模板 ===== */
+function tplMaintenance(){
+  return `<section class="step-panel active">
+    <div class="card mb-14">
+      <div class="card-head"><div><h2>第 5 步：设备维保、能耗与物资损耗</h2><p class="card-sub">维保第 5–10 行、公共能耗和物资折旧在本步录入；运营第 11–17 行在第 6 步。</p></div><span class="tag cyan">维保 / 能耗 / 折旧</span></div>
+
+      <h3>设备维保及维修材料（运营费用第 5–10 行）</h3>
+      <div class="table-wrap mb-14">
+        <table class="data-table">
+          <thead><tr><th>项目</th><th>数量</th><th>单价（元）</th><th>责任方</th><th>名义年度费用</th><th>计入年度费用</th></tr></thead>
+          <tbody>
+            ${state.ops.map((r,i) => r.group === 'maintenance' ? `<tr>
+              <td>${esc(r.name)}</td>
+              <td>${tableInput(`ops.${i}.quantity`, r.quantity, {step:1,min:0})}</td>
+              <td>${tableInput(`ops.${i}.unitPrice`, r.unitPrice, {step:0.01,min:0})}</td>
+              <td>${partySelect(`ops.${i}.party`, r.party)}</td>
+              <td class="readonly" data-row-group="opsRows" data-row="${r.id}" data-field="nominalAnnual" data-fmt="yuan0"></td>
+              <td class="readonly" data-row-group="opsRows" data-row="${r.id}" data-field="includedAnnual" data-fmt="yuan0"></td>
+            </tr>` : '').join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <h3>公共能耗（能耗测算第 5–8 行）</h3>
+      <div class="table-wrap mb-14">
+        <table class="data-table">
+          <thead><tr><th>设备</th><th>数量</th><th>功率 kW</th><th>日小时</th><th>年天数</th><th>负载系数</th><th>电价 元/kWh</th><th>年用电量</th><th>年费用</th></tr></thead>
+          <tbody>
+            ${state.energy.map((r,i) => `<tr>
+              <td>${esc(r.name)}</td>
+              <td>${tableInput(`energy.${i}.quantity`, r.quantity, {step:1,min:0})}</td>
+              <td>${tableInput(`energy.${i}.powerKw`, r.powerKw, {step:0.01,min:0})}</td>
+              <td>${tableInput(`energy.${i}.dailyHours`, r.dailyHours, {step:0.1,min:0})}</td>
+              <td>${tableInput(`energy.${i}.annualDays`, r.annualDays, {step:1,min:0,max:366})}</td>
+              <td>${tableInput(`energy.${i}.loadFactor`, r.loadFactor, {step:0.01,min:0,max:1})}</td>
+              <td>${tableInput(`energy.${i}.electricityPrice`, r.electricityPrice, {step:0.01,min:0})}</td>
+              <td class="readonly" data-row-group="energyRows" data-row="${r.id}" data-field="annualKwh" data-fmt="num0"></td>
+              <td class="readonly" data-row-group="energyRows" data-row="${r.id}" data-field="annualCost" data-fmt="yuan0"></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <h3>物资折旧（物资折旧第 5–7 行）</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>物资</th><th>数量</th><th>单价（元）</th><th>折旧年限</th><th>残值（元）</th><th>原值</th><th>年折旧</th></tr></thead>
+          <tbody>
+            ${state.assets.map((r,i) => `<tr>
+              <td>${esc(r.name)}</td>
+              <td>${tableInput(`assets.${i}.quantity`, r.quantity, {step:1,min:0})}</td>
+              <td>${tableInput(`assets.${i}.unitPrice`, r.unitPrice, {step:0.01,min:0})}</td>
+              <td>${tableInput(`assets.${i}.depreciationYears`, r.depreciationYears, {step:1,min:0})}</td>
+              <td>${tableInput(`assets.${i}.salvageValue`, r.salvageValue, {step:0.01,min:0})}</td>
+              <td class="readonly" data-row-group="assetRows" data-row="${r.id}" data-field="originalValue" data-fmt="yuan0"></td>
+              <td class="readonly" data-row-group="assetRows" data-row="${r.id}" data-field="annualDepreciation" data-fmt="yuan0"></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subtotal-bar">
+        <div class="label">第 5 步小计</div>
+        <div class="subtotal-items">
+          <div><span>维保及材料计入</span><b data-calc="maintenanceCostWan"></b></div>
+          <div><span>公共能耗</span><b data-calc="energyCostWan"></b></div>
+          <div><span>物资折旧</span><b data-calc="depCostWan"></b></div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function tplOpsTax(){
+  const p = state.params;
+  return `<section class="step-panel active">
+    <div class="grid cols-2 mb-14">
+      <div class="card">
+        <div class="card-head"><h2>第 6 步：日常运营费用</h2><span class="tag orange">运营费用第 11–17 行</span></div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>项目</th><th>数量</th><th>单价</th><th>责任方</th><th>计入年费</th></tr></thead>
+            <tbody>
+              ${state.ops.map((r,i) => r.group === 'daily' ? `<tr>
+                <td>${esc(r.name)}</td>
+                <td>${tableInput(`ops.${i}.quantity`, r.quantity, {step:1,min:0})}</td>
+                <td>${tableInput(`ops.${i}.unitPrice`, r.unitPrice, {step:0.01,min:0})}</td>
+                <td>${partySelect(`ops.${i}.party`, r.party)}</td>
+                <td class="readonly" data-row-group="opsRows" data-row="${r.id}" data-field="includedAnnual" data-fmt="yuan0"></td>
+              </tr>` : '').join('')}
+            </tbody>
+            <tfoot><tr><td colspan="4">运营费用合计 F18（含第 5 步维保行，只汇总一次）</td><td data-calc="opsCostYuan"></td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>管理酬金、准备金与教学税费</h3>
+        <div class="grid cols-2">
+          ${field({label:'管理酬金（B16）', path:'params.managementFee', value:p.managementFee, bindType:'wanYuan', unit:'万元/年', step:0.01, min:0, hint:'单独计入成本，不进入不可预见费基数。'})}
+          ${field({label:'不可预见费率（B17）', path:'params.contingencyRate', value:p.contingencyRate, bindType:'percent', unit:'%', step:0.1, min:0, max:100, hint:'基数=人员+运营+能耗+折旧。'})}
+          ${field({label:'综合税费率（B18）', path:'params.taxRate', value:p.taxRate, bindType:'percent', unit:'%', step:0.1, min:0, hint:'教学占位：综合税费=收入×税率。'})}
+          ${field({label:'目标净利润率（B19）', path:'params.targetNetMargin', value:p.targetNetMargin, bindType:'percent', unit:'%', step:0.1, min:0, hint:'用于保利反解；税费率+目标率应小于 100%。'})}
+        </div>
+        <div class="note warn">人员/运营年增幅、第 5 年追加维护属于六年情景分析参数；本次 v1 只做年度测算，不展示六年推演。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>年度汇总预览（费用汇总 B5:B15）</h3><span class="tag cyan">内部按元精算，显示换算万元</span></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tbody>
+            <tr><td>年度收入</td><td class="readonly" style="text-align:right" data-calc="revenueWan"></td></tr>
+            <tr><td>物业服务人员费用</td><td class="readonly" style="text-align:right" data-calc="staffCostWan"></td></tr>
+            <tr><td>项目运营费</td><td class="readonly" style="text-align:right" data-calc="opsCostWan"></td></tr>
+            <tr><td>公共区域能耗费</td><td class="readonly" style="text-align:right" data-calc="energyCostWan"></td></tr>
+            <tr><td>物资折旧</td><td class="readonly" style="text-align:right" data-calc="depCostWan"></td></tr>
+            <tr><td>管理酬金</td><td class="readonly" style="text-align:right" data-calc="mgmtWan"></td></tr>
+            <tr><td>不可预见费</td><td class="readonly" style="text-align:right" data-calc="contingencyWan"></td></tr>
+            <tr><td>综合税费</td><td class="readonly" style="text-align:right" data-calc="taxWan"></td></tr>
+            <tr><td><b>成本费用合计</b></td><td class="readonly" style="text-align:right;color:var(--orange)" data-calc="totalCostWan"></td></tr>
+            <tr><td><b>净利润</b></td><td class="readonly" style="text-align:right" data-tone="net" data-calc="netWan"></td></tr>
+            <tr><td>净利润率</td><td class="readonly" style="text-align:right" data-tone="net" data-calc="netMarginPct"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">费用唯一性：维保只来自运营费用对应行；能耗、折旧各自独立汇总；管理酬金不进入不可预见费基数；综合税费不进入不可预见费基数和保本固定成本；甲方责任运营行计入费用为 0。</div>
+    </div>
+  </section>`;
+}
+
+function tplResult(){
+  const p = state.params;
+  return `<section class="step-panel active">
+    <div class="kpi-grid">
+      <div class="card"><div class="card-head"><h3>年收入</h3><span class="tag cyan">收入合计</span></div><div id="gaugeRevenue" class="gauge"></div></div>
+      <div class="card"><div class="card-head"><h3>年成本费用</h3><span class="tag orange">含教学税费</span></div><div id="gaugeCost" class="gauge"></div></div>
+      <div class="card conclusion-card">
+        <div class="verdict" data-calc="verdict">—</div>
+        <div class="conclusion-grid">
+          <div class="metric"><span>净利润</span><b data-tone="net" data-calc="netWan"></b><small>万元/年</small></div>
+          <div class="metric"><span>净利润率</span><b data-tone="net" data-calc="netMarginPct"></b></div>
+          <div class="metric"><span>年收入</span><b data-calc="revenueWan"></b><small>万元</small></div>
+          <div class="metric"><span>年成本</span><b data-calc="totalCostWan"></b><small>万元</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="card">
+        <div class="card-head"><h3>保本点与保利点</h3><span class="tag">两条反解路径独立</span></div>
+        <div class="break-list">
+          <div class="break-row"><span>保本所需多经总额（B17）</span><b><span data-calc="beMultiTotalWan"></span> 万元/年</b></div>
+          <div class="break-row"><span>保本还需新增多经（B18）</span><b><span data-calc="beMultiNewWan"></span> 万元/年</b></div>
+          <div class="break-row"><span>保利所需多经总额（B19，总额口径）</span><b><span data-calc="targetMultiTotalWan"></span> 万元/年</b></div>
+          <div class="break-row"><span>保本所需物业收缴率（B20）</span><b data-calc="bePropertyPct"></b></div>
+          <div class="break-row"><span>保利所需物业收缴率（B21）</span><b data-calc="targetPropertyPct"></b></div>
+        </div>
+        <p class="note">增加多经路径锁定当前收缴率；提高物业收缴率路径锁定车位收入、现有多经和补贴，两条路径不同时调节。保利所需物业收缴率超过 100% 时，表示仅靠催缴住宅商业物业费无法实现 8% 目标净利率。</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>收入构成</h3><span class="tag cyan">测算模型 B7:B11</span></div>
+        <div id="chartRevenue" class="chart"></div>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="card">
+        <div class="card-head"><h3>成本费用构成</h3><span class="tag orange">费用汇总 B6:B12</span></div>
+        <div id="chartCost" class="chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>收缴率影响曲线</h3><span class="tag cyan">物业费综合收缴率 0–100%</span></div>
+        <div class="curve-control">
+          <span>当前物业费收缴率</span>
+          <input type="range" min="0" max="100" step="1" data-bind="params.propertyCollectionRate" data-bind-type="percent" value="${esc(num(p.propertyCollectionRate)*100)}">
+          <strong data-calc="propertyRatePct"></strong>
+        </div>
+        <div class="note" style="margin:-2px 0 10px;display:flex;gap:18px;flex-wrap:wrap">
+          <span><i style="display:inline-block;width:20px;height:3px;background:#39d5ff;vertical-align:middle;margin-right:7px;border-radius:2px"></i>当前收缴率：<b data-calc="propertyRatePct"></b></span>
+          <span><i style="display:inline-block;width:20px;border-top:2px dashed #ffb454;vertical-align:middle;margin-right:7px"></i>保本收缴率：<b data-calc="bePropertyPct"></b>（超过 100% 时图内不画虚线）</span>
+        </div>
+        <div id="chartCurve" class="chart tall"></div>
+        <p class="note">曲线使用同一计算引擎逐点临时复算，不污染当前表单状态；车位收缴率仍在第 3 步单独录入并参与计算。拖动滑块会同步修改当前项目的物业费收缴率。</p>
+      </div>
+    </div>
+
+    <details class="checklist">
+      <summary>投前检查清单（6 项，点击展开）</summary>
+      <div class="check-grid">
+        ${state.checklist.map(c => `<div class="check-item">
+          <b>${esc(c.category)}</b>
+          <div class="status">${esc(c.status)}</div>
+          <p>${esc(c.note)}</p>
+        </div>`).join('')}
+      </div>
+    </details>
+    <p class="note warn">${esc(state.meta.disclaimer)} 参考 PNG 为固定快照，修改输入后以本网页实时计算结果为准；本页为年度简化测算，不含六年情景、现金流、资产负债表或正式报价。</p>
+  </section>`;
+}
+
+;
+/* ===== 4. 状态、渲染、事件、图表与自动播放 ===== */
+const STEP_META = [
+  {title:'项目概况', hint:'确认演示口径与教学提示'},
+  {title:'体量与单价', hint:'面积、单价、收费月数和车位规模'},
+  {title:'收入假设', hint:'房屋与车位收缴率分开，多经补贴按年额'},
+  {title:'人员编制', hint:'六类岗位、薪酬社保与年度人员费用'},
+  {title:'设备维保损耗', hint:'维保材料、公共能耗、物资折旧'},
+  {title:'运营与税费', hint:'日常运营、管理酬金、准备金和教学税费'},
+  {title:'测算结果', hint:'盈亏、保本保利、构成图和收缴率曲线'}
+];
+const STEP_TEMPLATES = [tplOverview, tplVolume, tplRevenue, tplStaff, tplMaintenance, tplOpsTax, tplResult];
+
+let state = clone(DEFAULT_STATE);
+let currentStep = 0;
+let autoplayTimer = null;
+let charts = {};
+let lastCalc = null;
+
+const container = document.getElementById('stepContainer');
+const stepper = document.getElementById('stepper');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const playBtn = document.getElementById('playBtn');
+const stepHint = document.getElementById('stepHint');
+
+function $(selector){ return document.querySelector(selector); }
+function $$(selector){ return Array.from(document.querySelectorAll(selector)); }
+
+function getPath(obj, path){
+  return path.split('.').reduce((acc,key) => acc == null ? acc : acc[key], obj);
+}
+function setPath(obj, path, value){
+  const parts = path.split('.');
+  let cursor = obj;
+  for(let i=0;i<parts.length-1;i++){
+    const key = parts[i];
+    cursor = cursor[key];
+  }
+  cursor[parts[parts.length-1]] = value;
+}
+
+function renderStepper(){
+  if(!stepper) return;
+  stepper.innerHTML = STEP_META.map((s,i) => `
+    <button type="button" class="step ${i===currentStep?'active':''} ${i<currentStep?'done':''}" data-step="${i}" aria-current="${i===currentStep?'step':'false'}">
+      <span class="step-num">${i<currentStep ? '✓' : i+1}</span>
+      <span class="step-text"><b>${s.title}</b><small>${s.hint}</small></span>
+    </button>`).join('');
+  const activeBtn = stepper.querySelector('.step.active');
+  if(activeBtn && stepper.scrollWidth > stepper.clientWidth){
+    const sr = stepper.getBoundingClientRect();
+    const ar = activeBtn.getBoundingClientRect();
+    if(ar.left < sr.left + 24 || ar.right > sr.right - 24){
+      stepper.scrollLeft += (ar.left - sr.left) - (sr.width - ar.width) / 2;
+    }
+  }
+}
+function updateNav(){
+  if(prevBtn) prevBtn.disabled = currentStep === 0;
+  if(nextBtn) nextBtn.textContent = currentStep === 6 ? '回到第 1 步' : '下一步';
+  if(stepHint) stepHint.textContent = `第 ${currentStep+1} / 7 步 · ${STEP_META[currentStep].title}｜${STEP_META[currentStep].hint}`;
+}
+
+function refreshCalculatedUI(calcInput){
+  const c = calcInput || calculateModel(state);
+  lastCalc = c;
+  const view = {
+    totalAreaWan: fixed(c.totalAreaWan,2),
+    weightedPrice: fixed(c.weightedPrice,2),
+    saturatedRevenueWan: wan(c.residentialSaturated + c.commercialSaturated + c.parkingSaturated),
+    resSatWan: wan(c.residentialSaturated),
+    comSatWan: wan(c.commercialSaturated),
+    parkSatWan: wan(c.parkingSaturated),
+    propertyRatePct: pct(c.params.propertyCollectionRate),
+    parkingRatePct: pct(c.params.parkingCollectionRate),
+    resIncomeWan: wan(c.residentialIncome),
+    comIncomeWan: wan(c.commercialIncome),
+    parkIncomeWan: wan(c.parkingIncome),
+    multiIncomeWan: wan(c.multiIncome),
+    subsidyIncomeWan: wan(c.subsidyIncome),
+    revenueWan: wan(c.revenue),
+    revenueWanBig: wan(c.revenue),
+    staffCount: fixed(c.staffCount,0),
+    staffCostWan: wan(c.staffCost),
+    staffCostWanBig: wan(c.staffCost),
+    maintenanceCostWan: wan(c.maintenanceCost),
+    energyCostWan: wan(c.energyCost),
+    depCostWan: wan(c.depreciationCost),
+    opsCostWan: wan(c.opsCost),
+    opsCostYuan: '¥' + fixed(c.opsCost,0),
+    mgmtWan: wan(c.managementFee),
+    contingencyWan: wan(c.contingencyCost),
+    taxWan: wan(c.taxCost),
+    totalCostWan: wan(c.totalCost),
+    netWan: signedWan(c.netProfit),
+    netMarginPct: pct(c.netMargin),
+    beMultiTotalWan: wan(c.beMultiTotal),
+    beMultiNewWan: wan(c.beMultiNew),
+    targetMultiTotalWan: wan(c.targetMultiTotal),
+    bePropertyPct: pct(c.bePropertyRate),
+    targetPropertyPct: pct(c.targetPropertyRate)
+  };
+  $$('[data-calc]').forEach(el => {
+    const key = el.dataset.calc;
+    if(Object.prototype.hasOwnProperty.call(view,key)) el.textContent = view[key];
+  });
+  $$('[data-tone="net"]').forEach(el => {
+    el.style.color = c.netProfit < 0 ? 'var(--red)' : 'var(--green)';
+  });
+  const verdictEl = $('[data-calc="verdict"]');
+  if(verdictEl){
+    const label = c.netProfit < 0 ? '亏损' : c.netProfit > 0 ? '盈利' : '盈亏平衡';
+    const cls = c.netProfit < 0 ? 'loss' : c.netProfit > 0 ? 'profit' : 'break';
+    verdictEl.textContent = label;
+    verdictEl.className = 'verdict ' + cls;
+  }
+
+  const rowGroups = {staffRows:c.staffRows, opsRows:c.opsRows, energyRows:c.energyRows, assetRows:c.assetRows};
+  $$('[data-row-group]').forEach(el => {
+    const group = rowGroups[el.dataset.rowGroup] || [];
+    const line = group.find(x => x.id === el.dataset.row);
+    if(line) el.textContent = formatByFmt(line[el.dataset.field], el.dataset.fmt);
+  });
+
+  if(currentStep === 6 && window.echarts && Object.keys(charts).length){
+    updateResultCharts(c);
+  }
+}
+
+function disposeCharts(){
+  Object.values(charts).forEach(chart => { try{chart.dispose();}catch(e){} });
+  charts = {};
+}
+function showStep(index){
+  currentStep = Math.max(0, Math.min(STEP_META.length-1, index));
+  disposeCharts();
+  if(container) container.innerHTML = STEP_TEMPLATES[currentStep]();
+  renderStepper();
+  updateNav();
+  const c = calculateModel(state);
+  refreshCalculatedUI(c);
+  if(currentStep === 6) initResultCharts(c);
+  window.scrollTo(0,0);
+}
+function navigateManually(index){
+  stopAutoplay();
+  if(index >= 0 && index < STEP_META.length && index !== currentStep) showStep(index);
+  updatePlayButton();
+}
+
+function syncLinkedInputs(path, sourceEl){
+  let selector;
+  try { selector = `[data-bind="${CSS.escape(path)}"]`; } catch(e){ selector = `[data-bind="${path}"]`; }
+  $$(selector).forEach(other => {
+    if(other === sourceEl) return;
+    const v = getPath(state,path);
+    if(other.tagName === 'SELECT'){
+      other.value = v;
+    }else if(v === '' || v === null || v === undefined){
+      other.value = '';
+    }else if(other.dataset.bindType === 'percent'){
+      other.value = num(v) * 100;
+    }else if(other.dataset.bindType === 'wanYuan'){
+      other.value = num(v) / 10000;
+    }else{
+      other.value = v;
+    }
+  });
+}
+function handleBindEvent(e){
+  const el = e.target.closest('[data-bind]');
+  if(!el || !container.contains(el)) return;
+  const path = el.dataset.bind;
+  let value;
+  if(el.tagName === 'SELECT'){
+    value = el.value;
+  }else if(el.type === 'number' || el.type === 'range'){
+    if(String(el.value).trim() === ''){
+      value = '';
+    }else{
+      value = parseFloat(el.value);
+      if(!Number.isFinite(value)) return;
+      if(el.dataset.bindType === 'percent') value = value / 100;
+      if(el.dataset.bindType === 'wanYuan') value = value * 10000;
+    }
+  }else{
+    value = el.value;
+  }
+  setPath(state,path,value);
+  syncLinkedInputs(path,el);
+  refreshCalculatedUI();
+}
+
+function updatePlayButton(){
+  if(!playBtn) return;
+  const playing = autoplayTimer !== null;
+  playBtn.textContent = playing ? '■ 停止演示' : '▶ 自动演示录入';
+  playBtn.classList.toggle('playing', playing);
+}
+function stopAutoplay(){
+  if(autoplayTimer !== null){
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+  updatePlayButton();
+}
+function startAutoplay(){
+  stopAutoplay();
+  showStep(0);
+  autoplayTimer = setInterval(() => {
+    if(currentStep >= STEP_META.length - 1){
+      stopAutoplay();
+      return;
+    }
+    showStep(currentStep + 1);
+    if(currentStep === STEP_META.length - 1){
+      stopAutoplay();
+    }
+  }, 3200);
+  updatePlayButton();
+}
+
+function gaugeOption(title, valueWan, color){
+  const max = Math.ceil(Math.max(240, num(valueWan) * 1.25) / 10) * 10;
+  return {
+    animation:false,
+    series:[{
+      type:'gauge', min:0, max, radius:'94%', center:['50%','58%'],
+      progress:{show:true,width:14,itemStyle:{color}},
+      axisLine:{lineStyle:{width:14,color:[[1,'rgba(148,184,220,.18)']]}},
+      axisTick:{show:false},
+      splitLine:{length:10,lineStyle:{color:'rgba(220,236,255,.38)'}},
+      axisLabel:{color:'#9db4cc',distance:18,fontSize:10},
+      pointer:{width:5,itemStyle:{color}},
+      anchor:{show:true,size:14,itemStyle:{color}},
+      detail:{valueAnimation:false,formatter:v => fixed(v,2)+' 万',color:'#fff',fontSize:23,fontWeight:800,offsetCenter:[0,'39%']},
+      title:{color:'#9db4cc',fontSize:13,offsetCenter:[0,'69%']},
+      data:[{value:num(valueWan),name:title}]
+    }]
+  };
+}
+function revenueBarOption(c){
+  return {
+    animation:false,
+    tooltip:{trigger:'axis',valueFormatter:v => fixed(v,2)+' 万元'},
+    grid:{left:48,right:18,top:34,bottom:34},
+    xAxis:{type:'category',data:['住宅','商业','车位','多经','补贴'],axisLine:{lineStyle:{color:'rgba(157,196,232,.3)'}},axisLabel:{color:'#bcd3ea'}},
+    yAxis:{type:'value',name:'万元',nameTextStyle:{color:'#9db4cc'},axisLabel:{color:'#9db4cc'},splitLine:{lineStyle:{color:'rgba(157,196,232,.12)'}}},
+    series:[{
+      type:'bar',barWidth:'48%',
+      data:[c.residentialIncome/1e4,c.commercialIncome/1e4,c.parkingIncome/1e4,c.multiIncome/1e4,c.subsidyIncome/1e4],
+      itemStyle:{color:new window.echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#7ce7ff'},{offset:1,color:'#2377ff'}]),borderRadius:[8,8,0,0]},
+      label:{show:true,position:'top',color:'#dcecff',formatter:p => fixed(p.value,2)}
+    }]
+  };
+}
+function costDonutOption(c){
+  const data = [
+    {name:'人员费用',value:c.staffCost/1e4,itemStyle:{color:'#39d5ff'}},
+    {name:'项目运营费',value:c.opsCost/1e4,itemStyle:{color:'#2f7fff'}},
+    {name:'公共能耗',value:c.energyCost/1e4,itemStyle:{color:'#35d39a'}},
+    {name:'物资折旧',value:c.depreciationCost/1e4,itemStyle:{color:'#7dd3fc'}},
+    {name:'管理酬金',value:c.managementFee/1e4,itemStyle:{color:'#ffd166'}},
+    {name:'不可预见费',value:c.contingencyCost/1e4,itemStyle:{color:'#ffb454'}},
+    {name:'综合税费',value:c.taxCost/1e4,itemStyle:{color:'#ff6b6b'}}
+  ];
+  return {
+    animation:false,
+    tooltip:{trigger:'item',formatter:p => `${p.name}<br/>${fixed(p.value,2)} 万元（${p.percent}%）`},
+    legend:{bottom:0,type:'scroll',textStyle:{color:'#bcd3ea',fontSize:11}},
+    series:[{
+      type:'pie',radius:['45%','70%'],center:['50%','45%'],avoidLabelOverlap:true,
+      label:{show:false},labelLine:{show:false},data
+    }]
+  };
+}
+function curveOption(c){
+  const netData = [];
+  const marginData = [];
+  for(let r=0;r<=100;r++){
+    const cc = calculateModel(state,{params:{propertyCollectionRate:r/100}});
+    netData.push([r, Number((cc.netProfit/1e4).toFixed(4))]);
+    marginData.push([r, Number((cc.netMargin*100).toFixed(4))]);
+  }
+  const currentRate = num(c.params.propertyCollectionRate) * 100;
+  const beRate = num(c.bePropertyRate) * 100;
+  const markData = [{xAxis:currentRate,label:{show:false},lineStyle:{color:'#39d5ff',type:'solid',width:2}}];
+  if(beRate <= 100) markData.push({xAxis:beRate,label:{show:false},lineStyle:{color:'#ffb454',type:'dashed',width:2}});
+  return {
+    animation:false,
+    tooltip:{trigger:'axis',formatter(params){
+      const r = Math.round(num(params?.[0]?.data?.[0]));
+      const cc = calculateModel(state,{params:{propertyCollectionRate:r/100}});
+      return `物业费收缴率 ${r}%<br/>实收收入：${wan(cc.revenue)} 万元<br/>净利润：${signedWan(cc.netProfit)} 万元<br/>净利率：${pct(cc.netMargin)}`;
+    }},
+    legend:{top:0,textStyle:{color:'#bcd3ea'},data:['净利润（万元）','净利率（%）']},
+    grid:{left:54,right:54,top:42,bottom:38},
+    xAxis:{type:'value',min:0,max:100,name:'收缴率',nameTextStyle:{color:'#9db4cc'},axisLabel:{color:'#9db4cc',formatter:'{value}%'},splitLine:{lineStyle:{color:'rgba(157,196,232,.1)'}}},
+    yAxis:[
+      {type:'value',name:'净利润(万元)',nameTextStyle:{color:'#9db4cc'},axisLabel:{color:'#9db4cc'},splitLine:{lineStyle:{color:'rgba(157,196,232,.12)'}}},
+      {type:'value',name:'净利率(%)',nameTextStyle:{color:'#9db4cc'},axisLabel:{color:'#9db4cc',formatter:'{value}%'},splitLine:{show:false}}
+    ],
+    series:[
+      {name:'净利润（万元）',type:'line',smooth:true,showSymbol:false,data:netData,lineStyle:{width:3,color:'#39d5ff'},itemStyle:{color:'#39d5ff'},markLine:{symbol:'none',data:markData}},
+      {name:'净利率（%）',type:'line',yAxisIndex:1,smooth:true,showSymbol:false,data:marginData,lineStyle:{width:2,color:'#ffb454'},itemStyle:{color:'#ffb454'}}
+    ]
+  };
+}
+function initResultCharts(c){
+  if(!window.echarts){
+    ['gaugeRevenue','gaugeCost','chartRevenue','chartCost','chartCurve'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = '<div class="chart-error">未加载本地 ECharts。<br/>请确认 echarts.min.js 与本 HTML 位于同一文件夹后刷新。</div>';
+    });
+    return;
+  }
+  ['gaugeRevenue','gaugeCost','chartRevenue','chartCost','chartCurve'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) charts[id] = echarts.init(el);
+  });
+  updateResultCharts(c);
+}
+function updateResultCharts(c){
+  if(!window.echarts || !Object.keys(charts).length) return;
+  if(charts.gaugeRevenue) charts.gaugeRevenue.setOption(gaugeOption('年收入（万元）',c.revenue/1e4,'#39d5ff'),true);
+  if(charts.gaugeCost) charts.gaugeCost.setOption(gaugeOption('年成本（万元）',c.totalCost/1e4,'#ffb454'),true);
+  if(charts.chartRevenue) charts.chartRevenue.setOption(revenueBarOption(c),true);
+  if(charts.chartCost) charts.chartCost.setOption(costDonutOption(c),true);
+  if(charts.chartCurve) charts.chartCurve.setOption(curveOption(c),true);
+}
+
+if(stepper) stepper.addEventListener('click', e => {
+  const btn = e.target.closest('[data-step]');
+  if(btn) navigateManually(Number(btn.dataset.step));
+});
+if(prevBtn) prevBtn.addEventListener('click', () => navigateManually(currentStep - 1));
+if(nextBtn) nextBtn.addEventListener('click', () => navigateManually(currentStep === 6 ? 0 : currentStep + 1));
+if(container){
+  container.addEventListener('input', handleBindEvent);
+  container.addEventListener('change', handleBindEvent);
+}
+if(playBtn) playBtn.addEventListener('click', () => {
+  if(autoplayTimer !== null) stopAutoplay(); else startAutoplay();
+});
+const clearBtn = document.getElementById('clearBtn');
+const resetBtn = document.getElementById('resetBtn');
+if(clearBtn) clearBtn.addEventListener('click', () => {
+  if(window.confirm('确定清空当前填写内容？可点击“恢复云栖样例”找回基准数据。')){
+    state = createEmptyState();
+    showStep(currentStep);
+  }
+});
+if(resetBtn) resetBtn.addEventListener('click', () => {
+  state = clone(DEFAULT_STATE);
+  showStep(currentStep);
+});
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => Object.values(charts).forEach(chart => { try{chart.resize();}catch(e){} }), 160);
+});
+
+rootObject.YQApp = {
+  showStep, startAutoplay, stopAutoplay,
+  getState: () => state,
+  getLastCalc: () => lastCalc
+};
+
+if(container && stepper && document.getElementById('stepContainer')){
+  renderStepper();
+  showStep(0);
+  if(prevBtn) prevBtn.disabled = true;
+  updatePlayButton();
+}
+
+  </script>
+</body>
+</html>

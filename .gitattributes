@@ -7,3 +7,6 @@
 *.docx binary
 # Preserve the delivered source bytes and provenance hashes.
 01-文件加密工具/源代码/** -text
+02-投标测算汇报网页/源代码/** -text
+02-投标测算汇报网页/练习文件/交给豆包/** -text
+02-投标测算汇报网页/提示词/分步提示词.txt -text
