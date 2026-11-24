@@ -1,0 +1,11 @@
+{
+  "repository_edition": "1.0.0",
+  "date": "2026-11-24",
+  "source": "作者第 03 课 Windows 家具表实录与 v4.0 审片",
+  "offline_version": "v1.0",
+  "zip_sha256": "e8f8ead94e2c0b10e06c1ad58f311812451499a0c15aca16e1902e56fb542b1e",
+  "unchanged_sha256": {
+    "家具表练习.sql": "073bd415932df4c45accf73799d29905019a81bc37602cef1c75f938b2c1fdc2"
+  },
+  "verification": "已逐页审阅两份 Word，核对实录配图、文件及提示词。未在新的 Windows 环境重装或重跑 SQL。"
+}
