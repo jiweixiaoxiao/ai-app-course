@@ -1,0 +1,145 @@
+{
+  "title": "第四课 Flutter 安卓真机分步提示词",
+  "intro": [
+    "每次只复制当前步骤两条「复制」标记之间的内容。同一会话里，看到核对结果后再继续。"
+  ],
+  "sections": [
+    {
+      "id": "01",
+      "title": "检查工具清单",
+      "when": "在豆包「工作」中添加项目文件夹后使用。",
+      "copy": [
+        "我要在这台 Windows 电脑上用 Flutter 做安卓 App。请实际检查这份清单：① Git；② Flutter SDK；③ Android Studio 和它自带的 Java；④ Android SDK 的平台、构建工具、命令行工具和平台工具。分别列出已可用、缺少、已装但需要配置的项。能查到版本或路径的写在旁边。这一步只检查，先别安装。"
+      ],
+      "check": "豆包逐项列出已可用、缺少或需要配置的工具。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": false
+    },
+    {
+      "id": "01A",
+      "title": "指定目录 可选",
+      "when": "把第一行换成你自己的项目路径。将本段加到第 01 条之后一起发。",
+      "copy": [
+        "我的计数器项目放在 C:\\develop\\flutterProject\\01counterProject。请记住这个目录，后面创建和运行 App 都用这里。",
+        "开发工具按下面的规则处理：已经装好而且能用的，沿用原位置；缺少的，后续按以下位置安装。",
+        "Git：C:\\Program Files\\Git",
+        "Flutter SDK：%USERPROFILE%\\develop\\flutter",
+        "Android Studio：C:\\Program Files\\Android\\Android Studio，使用它自带的 JDK",
+        "Android SDK：%LOCALAPPDATA%\\Android\\Sdk",
+        "请把上面的环境变量展开成我这台电脑的完整路径。检查结果里，已安装的写实际路径，缺少的写计划安装路径。如果路径不可写，或者 Flutter SDK 路径含空格，请告诉我可用的位置。这一步只列清单，先别安装。"
+      ],
+      "check": "豆包把路径展开并说明工具的现状。",
+      "next": "核对完清单，再从第 02 条往下走。"
+    },
+    {
+      "id": "02",
+      "title": "安装 Git",
+      "when": "核对上一项结果后使用。",
+      "copy": [
+        "请只处理 Git。缺少就从 Git for Windows 官网安装；已装就直接验证。装好后新开终端运行 git --version，把版本号给我看。"
+      ],
+      "check": "新开的 PowerShell 显示 git version 和版本号。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": true
+    },
+    {
+      "id": "03",
+      "title": "安装 Flutter SDK",
+      "when": "核对上一项结果后使用。",
+      "copy": [
+        "请只处理 Flutter SDK。缺少就下载适合这台 Windows 电脑的官方稳定版，解压到我能写入且没有空格的目录，把它的 bin 加到用户 Path。官网太慢时试 Flutter 国内镜像 storage.flutter-io.cn。已有 SDK 就沿用。新开终端运行 flutter --version，把结果给我看。"
+      ],
+      "check": "新终端显示 Flutter 版本号。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": false
+    },
+    {
+      "id": "04",
+      "title": "安装 Android Studio（自带 JDK）",
+      "when": "核对上一项结果后使用。",
+      "copy": [
+        "请帮我安装并打开官方稳定版 Android Studio。已经装过就直接打开。确认它自带的 JDK 能用，给我看 Java 版本，告诉我怎么进入 SDK Manager。安装向导如果已经装了部分 SDK，请把装好的记下来。"
+      ],
+      "check": "Android Studio 可以打开，内置 Java 显示版本。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": false
+    },
+    {
+      "id": "05",
+      "title": "安装 Android SDK",
+      "when": "核对上一项结果后使用。",
+      "copy": [
+        "请按这台电脑的 Flutter 版本，在 SDK Manager 带我补齐安卓真机需要的 SDK Platform、Build-Tools、Command-line Tools、Platform-Tools 等组件。已可用的沿用，按清单逐项核对；遇到许可让我自己确认。最后运行 flutter doctor -v，只看 Android toolchain。还有缺项就修好再查。"
+      ],
+      "check": "Android toolchain 检查通过。",
+      "next": "开 USB 调试，连接真实手机，再发第 06 条。",
+      "new_page": true
+    },
+    {
+      "id": "06",
+      "title": "找到我的手机",
+      "when": "先打开 USB 调试，插线并在手机上允许调试",
+      "copy": [
+        "我已经用数据线把安卓手机连上电脑了。请运行 flutter devices，把对应我这部安卓手机的那一行指给我看。没找到就带我查 USB 调试、手机授权、数据线和 Windows 驱动，查到再继续。"
+      ],
+      "check": "设备列表有这部安卓手机的型号。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": false
+    },
+    {
+      "id": "07",
+      "title": "运行默认计数器",
+      "when": "页面打开后，自己点两下加号",
+      "copy": [
+        "在当前选中的工作文件夹里创建标准 Flutter 项目 counter_demo，保留自带的计数器。已有这个练习项目就接着用。请进入项目，指定刚才认出的安卓手机运行，直到手机出现计数器。首次构建先用项目原下载地址；如果 Gradle 下载失败，请按项目版本试华为云镜像的同名 ZIP，核对官方校验值。Maven 依赖下载失败时按报错试对应的阿里云仓库。"
+      ],
+      "check": "手机出现计数器，点两次加号能看到 2。",
+      "next": "本阶段完成后，在同一会话发下一条。",
+      "new_page": false
+    },
+    {
+      "id": "08",
+      "title": "给 App 起名字",
+      "when": "示范名字用“随手数”",
+      "copy": [
+        "请把这个安卓 App 在手机应用列表里显示的名字改成“随手数”。保留计数器功能、项目目录和应用 ID。请重新构建，装回刚才那部手机。"
+      ],
+      "check": "手机图标下显示你起的名字。",
+      "next": "核对新名字和计数后，可选第 09 条换图标。",
+      "new_page": true
+    },
+    {
+      "id": "09",
+      "title": "换 App 图标（可选）",
+      "when": "发这条时一起附上图片",
+      "copy": [
+        "请用我随这条消息提供的图片做成“随手数”的安卓启动图标。保留应用名称和计数功能，重新构建，装回刚才那部手机。装好后提醒我回到手机应用列表看新图标。"
+      ],
+      "check": "手机图标已换，点开后仍然能计数。",
+      "next": "用手机核对图标。没有图片时，可以请豆包按名字设计一个。",
+      "new_page": false
+    },
+    {
+      "id": "10A",
+      "title": "安装遇到问题时",
+      "when": "先把 Flutter全环境一键安装脚本.ps1 放进豆包项目目录，连同完整报错一起发。",
+      "copy": [
+        "请先读工作文件夹里的《Flutter全环境一键安装脚本.ps1》，对照我刚才的报错和电脑上的实际情况，告诉我卡在哪一步、原因可能是什么，以及这一步该怎么修。这次先帮我排错。"
+      ],
+      "check": "豆包指出和报错相关的那一步，并给出修法。",
+      "next": "按建议修复并重查本步骤。",
+      "new_page": true
+    },
+    {
+      "id": "10B",
+      "title": "下次换电脑，一键安装",
+      "when": "换电脑时使用。先把 Flutter全环境一键安装脚本.ps1 放进豆包项目目录。",
+      "copy": [
+        "请先读工作文件夹里的《Flutter全环境一键安装脚本.ps1》。我想在这台 Windows 电脑上用安卓真机做 App。先看看已有的工具，告诉我还要装什么、会改哪些设置，把需要我同意的许可给我看。等我确认，再运行脚本。装完请打开新终端，检查 Flutter 版本和 Android toolchain，把结果告诉我。"
+      ],
+      "check": "先核对目录、已有工具和许可，再确认安装。",
+      "next": "在新终端检查 Android toolchain。脚本版本与录制不同，见脚本说明。",
+      "new_page": false
+    }
+  ]
+}

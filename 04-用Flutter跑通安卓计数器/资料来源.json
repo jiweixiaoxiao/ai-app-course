@@ -1,0 +1,58 @@
+{
+  "course": "04",
+  "version": "1.0.0",
+  "offline_package": "v1.0",
+  "media_baseline": "第04课初剪 v13 12:31.1",
+  "video_publication": "入口待补充",
+  "frame_evidence": [
+    {
+      "file": "01-选中工作目录.png",
+      "seconds": 75
+    },
+    {
+      "file": "02-在新终端确认Git.png",
+      "seconds": 214
+    },
+    {
+      "file": "03-检查Flutter版本.png",
+      "seconds": 284.13
+    },
+    {
+      "file": "04-Studio欢迎页.png",
+      "seconds": 357.43
+    },
+    {
+      "file": "05-检查SDK工具.png",
+      "seconds": 443
+    },
+    {
+      "file": "06-手机的版本信息.png",
+      "seconds": 498.1
+    },
+    {
+      "file": "07-识别安卓设备.png",
+      "seconds": 565
+    },
+    {
+      "file": "08-真机计数.png",
+      "seconds": 621.7
+    },
+    {
+      "file": "09-随手数桌面图标.png",
+      "seconds": 686
+    },
+    {
+      "file": "10-片尾一键安装脚本.png",
+      "seconds": 729.5
+    }
+  ],
+  "source_limit": "收录片尾脚本和随手数原图。计数器通过 Flutter CLI 生成，录制工程未归档。",
+  "unchanged_sha256": {
+    "Flutter全环境一键安装脚本.ps1": "b1fd29411b01bd7eb1d48aa854ef3a63902dca9a367ddd262bdbc75207aa47bb",
+    "assets/随手数-App图标原图.png": "541aa3d6db38bfc2995552683ab85ed8d9f709778757c3c38b551e3a18f51dd8"
+  },
+  "verification": {
+    "recorded": "Windows 11 与安卓真机在录制中完成工具检查、计数、改名和换图标",
+    "current": "转写与截图核对、Word 全页审阅、提示词一致性、脚本 PowerShell Parser 语法、源码和图标 SHA256。当前资料整理未在 Windows 重跑安装。"
+  }
+}
