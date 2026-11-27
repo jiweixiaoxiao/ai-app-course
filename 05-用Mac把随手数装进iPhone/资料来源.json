@@ -1,0 +1,138 @@
+{
+  "course": "05",
+  "version": "1.0.0",
+  "offline_package": "v1.0",
+  "media_baseline": "第五课逐项返修 v5 / 11:05.167",
+  "video_publication": "入口待补充",
+  "frame_evidence": [
+    {
+      "file": "01-主屏成品.png",
+      "seconds": 533.8
+    },
+    {
+      "file": "02-往豆包发第一条.png",
+      "seconds": 84.7
+    },
+    {
+      "file": "03-核对Xcode工具.png",
+      "seconds": 196.9
+    },
+    {
+      "file": "04-指定Flutter目录.png",
+      "seconds": 234.2
+    },
+    {
+      "file": "05-确认工程入口.png",
+      "seconds": 288.5
+    },
+    {
+      "file": "06-信任电脑.png",
+      "seconds": 321.5
+    },
+    {
+      "file": "07-选个人团队.png",
+      "seconds": 394.9
+    },
+    {
+      "file": "08-修复App编号.png",
+      "seconds": 425.5
+    },
+    {
+      "file": "09-信任开发者.png",
+      "seconds": 475.3
+    },
+    {
+      "file": "10-真机加到2.png",
+      "seconds": 484.2
+    },
+    {
+      "file": "11-拔线后重开.png",
+      "seconds": 615.7
+    },
+    {
+      "file": "12-七天后重装.png",
+      "seconds": 639.0
+    },
+    {
+      "file": "13-iOS组件安装按钮.png",
+      "seconds": 165.6
+    },
+    {
+      "file": "14-调试版英文提示.png",
+      "seconds": 562.3
+    }
+  ],
+  "unchanged_sha256": {
+    "counter_demo/.gitignore": "441eaa1de5b3db9fae056e7503567e9f8dd94173e1389c60f76956abf729015a",
+    "counter_demo/.metadata": "4ab25e3a6f7de36802f631c0c901448f1895aa6a1362f93e43ec792ae7f51596",
+    "counter_demo/analysis_options.yaml": "d6702eea40def1dc7143adfcf5a3fdf59b8f83ac2ca298857c502775830813a7",
+    "counter_demo/ios/.gitignore": "37380775aeb2499662b7aca80f4ac4c95ae827c3ba2bfa179aa3e9af4812c623",
+    "counter_demo/ios/Flutter/AppFrameworkInfo.plist": "da12038f9b2688a8a26160fea2609fa8fcb11421448c109f09c0f573efe7698d",
+    "counter_demo/ios/Flutter/Debug.xcconfig": "a82d7765b37116ee4821d2cd1d65942febf8032353757ffb0826eabde785b4a6",
+    "counter_demo/ios/Flutter/Release.xcconfig": "a82d7765b37116ee4821d2cd1d65942febf8032353757ffb0826eabde785b4a6",
+    "counter_demo/ios/Runner/AppDelegate.swift": "451c6d9ba0a2b3ff43092ea349c60fa79a91f1158b915eb29dbdd357cb95d7b8",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": "3b1e214f466ffedff74baa5598ad5c4421130eea6bc8d57b8fe23435e8280ae4",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": "7770183009e914112de7d8ef1d235a6a30c5834424858e0d2f8253f6b8d31926",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": "cab10a0d391ec5bc09ef50ce49e8ad401cee7ef03707ec0923a222c5c2b3d212",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": "b9ad02cf6576a04d1b6806ac02a2431481b448dd0c2e505ce25842d1f7c4730b",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": "c6e6d3b215ae744a9c391f4c4d44157eff5e739d6ad6c39f9bfa5df66dddd267",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": "5dee24dc104ac76dc162e42ae0beb163d426bf365562ee28ba7b3ad368559a60",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": "a9b21eb6f4271385655a8771f76e29eef8c1107d7879cbcfc567e6619d1f716a",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": "e677d701ffe4af7bc2935098d6b3984cc9ab7ace573e6900955a5535b12410cf",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": "b9ad02cf6576a04d1b6806ac02a2431481b448dd0c2e505ce25842d1f7c4730b",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": "7c61c42fc7b657d9cf314d32a4ec458f0647c3aaf360be1b9377857266ec2499",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": "19be171481dc71a0b2803ebcd01dd8b0c5fd5778dee34c0a3cabc948c225f24e",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": "19be171481dc71a0b2803ebcd01dd8b0c5fd5778dee34c0a3cabc948c225f24e",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": "4209a49e44a92ec40a327d3455eb1b1c153ee83d75de1c2be0a12ab18b2ff9de",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": "836c918cb613249eba0483a6b02fa3df3c1c0a89a315ee4d3b88509b83c7ab73",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": "41c7d42f6e61f8fe7f30b1ffa2256aecbc9682be06d18c4a3062043e1a2e547c",
+    "counter_demo/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": "5d7e5bdf01b93802bc973345b3a78c038907147625035952a08a115a563b7f81",
+    "counter_demo/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json": "ccc7950fd5f5b82067c85f667940a9d59189151460761ece8098ca78daa19469",
+    "counter_demo/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": "93ae7d494fad0fb30cbf3ae746a39c4bc7a0f8bbf87fbb587a3f3c01f3c5ce20",
+    "counter_demo/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": "93ae7d494fad0fb30cbf3ae746a39c4bc7a0f8bbf87fbb587a3f3c01f3c5ce20",
+    "counter_demo/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": "93ae7d494fad0fb30cbf3ae746a39c4bc7a0f8bbf87fbb587a3f3c01f3c5ce20",
+    "counter_demo/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md": "a985b626c4f7546a8ba392d135e9226c3547c8e2b46895f5f2bdf40d7b14ef9f",
+    "counter_demo/ios/Runner/Base.lproj/LaunchScreen.storyboard": "857e61203b3deafb05766d8fcda898b86a7cb6f3d5e385ecc9926c4d698215e9",
+    "counter_demo/ios/Runner/Base.lproj/Main.storyboard": "fd367b6c43006d61b730f674970dd48b9f662c8f2264e52ffc1558102a2c9f2d",
+    "counter_demo/ios/Runner/Info.plist": "c5d8edbfecf1ed5b1bbf7ced5d3d8d1b1d7ef6f15502841f8092b9f01e3f56e4",
+    "counter_demo/ios/Runner/Runner-Bridging-Header.h": "1a8d11d01d1cc92c650c9c9ed35299240052d4683a15a719a2315ef44185e074",
+    "counter_demo/ios/Runner/SceneDelegate.swift": "add68b905971dedfcc0d0b5b7118030de5925ba8c081ad9815463699e3a444ad",
+    "counter_demo/ios/Runner.xcodeproj/project.pbxproj": "ceb07d76d32e4b08576d3e0487395ea6f35c0e20cd3726c77fb0c7ec115cbcf8",
+    "counter_demo/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata": "7f3b00b5c3fdb45242d7b87e1e5c4e25d1fa8129a16c94295ecc4e8ea2235c5f",
+    "counter_demo/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542",
+    "counter_demo/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings": "11b247bc6796892d67c9a821d18604db4dd6a880981b34f38460b9866e6b247f",
+    "counter_demo/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme": "9fbce429f56243561dd437a527136c9f9ed77165e3b271b923faf236cfcd0484",
+    "counter_demo/ios/Runner.xcworkspace/contents.xcworkspacedata": "46c3c9702ff7c5584e11c954d943cfb6e07fb26e3fbd072ddbc0f388aa352de1",
+    "counter_demo/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542",
+    "counter_demo/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings": "11b247bc6796892d67c9a821d18604db4dd6a880981b34f38460b9866e6b247f",
+    "counter_demo/ios/RunnerTests/RunnerTests.swift": "20ccd1344c37c289e1ab6ab48f271134f7ba0cd8df0ae1f53add895323d72384",
+    "counter_demo/lib/main.dart": "5a0fdbe80d6171b70685c2e7b771d6c9a352eba6a13abdefe6323b9f38167378",
+    "counter_demo/pubspec.lock": "2060da422f76e8d10b703a9b8fb71e2a62172721aa976fc3821c935fb4cf8d56",
+    "counter_demo/pubspec.yaml": "57dba3bd2b244ac1c72272894b6609ecd636c6250712b5d398fafbe334accc21",
+    "counter_demo/test/widget_test.dart": "e8b84e59328edffb9d2357e8ea68c80c8dae8d83338a2568efdf698cb0be56da",
+    "成品对照/ios/Runner/Info.plist": "9fd9a5e7b5c8abe5d64fd853b48050a9d04dbcb903249d2793c6225c702751d2",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": "3b1e214f466ffedff74baa5598ad5c4421130eea6bc8d57b8fe23435e8280ae4",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": "c70af375959a76377a13438d0c50ec269135e4f01d29120d310954d6af181e9a",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": "7e64c77fdb7391a24b89cf27b453fdc31620d2113492f358471d8148b623f213",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": "4ea1a533ac4e2ff23c344c2c95eedc6a600a47d841e84dec7af6cef1933a1f62",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": "f00a4cb41b4afd3b7be9567e8e1bd8c7d4baaaa176870b08334a2d3d8eb9b864",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": "ee4df82af727b32f7a3a914f93d231d1f5298e230d6d93a9c1c5cf4e7fb95e25",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": "aa47dd7ab1e074f8081828bbbb5e736edc8ec694d606713ae91e1d0110fb5e15",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": "5daa76bd450de8095a7f0df8284eea7bed6e3e56153cdb6eaa16a24b6f80b408",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": "4ea1a533ac4e2ff23c344c2c95eedc6a600a47d841e84dec7af6cef1933a1f62",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": "c0b7ff95195f5c532821e6d8fa7f33de2f30a6764cbe51f00ab10315bb6093a0",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": "9f7f6bcca4d32eb5c326c3b3e3ff4298e5f049a39116b79ef75fb9fcb1d3634a",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": "9f7f6bcca4d32eb5c326c3b3e3ff4298e5f049a39116b79ef75fb9fcb1d3634a",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": "7387927b81e67f7f3abb76172a326ab27bf24f84749cdc6aba163547961796fd",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": "5dc19e0f87f32235cf9e87cfe91b39beb8a29d475ef70ea9979587990bc02017",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": "24dea96e0c4adf7f431e38c2ab12ba5ac9d2e7409914e750cec2a739581a5174",
+    "成品对照/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": "0809cc288b6d55691a581c97b926cd2d3704e303e43d61665522d676213a467a",
+    "图标/随手数-iOS图标-1024.png": "154df44e4f746e32ac79373a081fe052b73bb0571bf99e5a046c0b7bd351c95c",
+    "图标/随手数-实录卡通图标.png": "c70af375959a76377a13438d0c50ec269135e4f01d29120d310954d6af181e9a"
+  },
+  "verification": {
+    "课堂实录": "iPhone 真机个人签名、首次计数、改名换头像、拔线主屏重开",
+    "本次核验": "隔离工程依赖解析、静态分析、组件计数 0→1→2、模拟器构建、未签名 Release、套用成品资源后的显示名",
+    "范围": "本轮未重做个人账号真机签名或七天后的到期安装"
+  }
+}

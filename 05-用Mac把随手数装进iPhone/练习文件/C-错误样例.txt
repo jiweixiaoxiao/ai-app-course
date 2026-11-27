@@ -1,0 +1,6 @@
+﻿练习用虚构情境
+当前步骤：06
+现象：Team 已选 Personal Team。
+第一条错误：Failed Registering Bundle Identifier
+下一条错误：No profiles for com.example.counterDemo were found
+请填写：先检查的字段、修改后观察哪里、何时继续。
