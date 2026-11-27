@@ -18,6 +18,8 @@ AI创造加｜让 AI 帮你做 App｜资料 v1.0
 | 设备和计数练习 | [练习说明](练习文件/练习说明.md) · [检查清单](检查清单.md) · [常见问题](常见问题.md) |
 | 离线阅读 | [完整轻量资料 ZIP，含两份 Word](下载/第五课完整学习资料-v1.0.zip) · [安装与官方入口](源代码/安装与官方入口.md) |
 
+Gitee 对这一大小的 ZIP 要求登录。未登录的读者可用 [GitHub 同版 ZIP 直链](https://raw.githubusercontent.com/jiweixiaoxiao/ai-app-course/main/05-%E7%94%A8Mac%E6%8A%8A%E9%9A%8F%E6%89%8B%E6%95%B0%E8%A3%85%E8%BF%9BiPhone/%E4%B8%8B%E8%BD%BD/%E7%AC%AC%E4%BA%94%E8%AF%BE%E5%AE%8C%E6%95%B4%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99-v1.0.zip) 下载；两个文件内容一致。
+
 视频入口待补充。带 macOS arm64 Flutter SDK 的百度网盘版分享入口待补充；Intel Mac 可通过官方归档选择 x64。录制用 Flutter 3.50.1、Xcode 27.2。七天重装一节是操作说明，当日实录覆盖第一次安装和独立打开。[资料来源](资料来源.json)
 
 [上一课 · Windows 与安卓](../04-用Flutter跑通安卓计数器/README.md) · [返回课程总索引](../README.md)
